@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="true"
+    android:background="#f0f0f0">
+
+    <LinearLayout
+        android:id="@+id/topSection"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView"
+            android:layout_gravity="center"
+            android:src="@drawable/laser_car_transparent" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/middleSection"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#a43939"
+        android:paddingBottom="20dp"
+        android:paddingTop="20dp"
+        android:layout_weight="2"
+        android:gravity="center">
+
+        <ImageButton
+            android:id="@+id/imageButton_play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00000000"
+            android:onClick="playMessage"
+            android:src="@drawable/ic_menu_play"
+            android:padding="15dp" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButton_settings"
+            android:src="@drawable/ic_menu_settings"
+            android:background="#00000000"
+            android:onClick="settingsMessage"
+            android:padding="10dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottomSection"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#ff363636"
+        android:layout_weight="1"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Laser Car Project - Parrot Awards &amp; ESIEE Paris - Version 0.3"
+            android:id="@+id/bottomText"
+            android:textColor="#FFFFFF"
+            android:gravity="center|center_vertical"
+            android:textSize="16sp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" />
+    </LinearLayout>
+
+</LinearLayout>
