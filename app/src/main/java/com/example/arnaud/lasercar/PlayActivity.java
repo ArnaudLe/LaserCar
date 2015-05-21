@@ -69,15 +69,26 @@ public class PlayActivity extends ActionBarActivity implements SensorEventListen
             // Appuie sur avancer OU Relache reculer
             if((mVitesse >= 0 && mAutoIncrement) || (mVitesse < 0 && !mAutoDecrement))
             {
-                increment();
-                repeatUpdateHandler.postDelayed(new RptUpdater(), REP_DELAY);
+                if(mVitesse < 100)
+                {
+                    increment();
+                    repeatUpdateHandler.postDelayed(new RptUpdater(), REP_DELAY);
+                }
+                else repeatUpdateHandler.postDelayed(new RptUpdater(), REP_DELAY);
             }
+
+
+                   
 
             // Relache avancer OU Appuie reculer
             else if((mVitesse > 0 && !mAutoIncrement) || (mVitesse <= 0 && mAutoDecrement))
             {
-                decrement();
-                repeatUpdateHandler.postDelayed(new RptUpdater(), REP_DELAY);
+                if(mVitesse > -100)
+                {
+                    decrement();
+                    repeatUpdateHandler.postDelayed(new RptUpdater(), REP_DELAY);
+                }
+                else repeatUpdateHandler.postDelayed(new RptUpdater(), REP_DELAY);
             }
         }
     } // Fin thread
