@@ -52,7 +52,7 @@ public class PlayActivity extends Activity implements SensorEventListener
     private boolean mAutoIncrement = false; // indique état Avancer ou Reculer
     private boolean mAutoDecrement = false;
     private int mVitesse;
-    private static int REP_DELAY = 50;
+    private static int REP_DELAY = 25;
     // Attributs mise en forme des données
     private TextView tvDonnees;
     // Attribus connexion RPI et envoi de données
@@ -122,7 +122,7 @@ public class PlayActivity extends Activity implements SensorEventListener
         flagPlayActivity = true;
 
         /* ================================================================================ */
-        /* ================================ GESTION BOUTONS =============================== */
+        /* ============================ GESTION BOUTONS VITESSE =========================== */
         /* ================================================================================ */
         // Bouton Avancer
         ibAvancer.setOnLongClickListener
@@ -225,11 +225,11 @@ public class PlayActivity extends Activity implements SensorEventListener
         xAngle *= 180.00;   yAngle *= 180.00;   zAngle *= 180.00;
         xAngle /= 3.141592; yAngle /= 3.141592; zAngle /= 3.141592;
 
-        // PositionAccelerometer(xAngle, yAngle, zAngle);
-        // getValuesAccelerometer();
+        PositionAccelerometer(xAngle, yAngle, zAngle);
+        // setFormMotorAngle();
     }
 
-    // Affiche les coordonnéees XYZ de l'accéléromètre (non utilisé)
+    // Affiche les coordonnéees XYZ de l'accéléromètre
     public void PositionAccelerometer(float x, float y, float z)
     {
         tvAccelerometerX.setText("X : " + x);
@@ -248,16 +248,16 @@ public class PlayActivity extends Activity implements SensorEventListener
         return info.getMacAddress();
     }
 
-    // Met sous la bonne forme pour envoi de données accéléromètre
-    public String getValuesAccelerometer()
+    // Met sous la bonne forme pour envoi de données moteur + angle
+    public String setFormMotorAngle()
     {
         int yFloor = (int) Math.floor(yAngle); // Arrondi de l'angle y
-        String valuesAccelerometer = "";
+        String data = "";
 
-        valuesAccelerometer = getAdresseMac() + "&moteur&" + mVitesse + "*" + yFloor;
+        data = getAdresseMac() + "&moteur&" + mVitesse + "*" + yFloor;
 
-        //tvDonnees.setText(valuesAccelerometer);
-        return valuesAccelerometer;
+        //tvDonnees.setText(data);
+        return data;
     }
 
     /* ================================================================================ */
@@ -280,12 +280,12 @@ public class PlayActivity extends Activity implements SensorEventListener
                 while(flagPlayActivity)
                 {
                     OutputStream outputStream;
-                    String msg = getValuesAccelerometer();
+                    String msg = setFormMotorAngle();
                     outputStream = mySocket.getOutputStream();
                     PrintStream printStream = new PrintStream(outputStream);
                     printStream.print(msg);
                     //printStream.close();
-                    Thread.sleep(200);
+                    Thread.sleep(25);
                 }
 
             } catch (IOException | InterruptedException e1) {
