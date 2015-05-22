@@ -1,5 +1,5 @@
 package com.example.arnaud.lasercar;
-
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
@@ -30,10 +30,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class PlayActivity extends ActionBarActivity implements SensorEventListener
+public class PlayActivity extends Activity implements SensorEventListener
 {
     /* ================================================================================ */
-    /* ========================= DECLARATION ATTRIBUTS ========================= */
+    /* =========================== DECLARATION ATTRIBUTS ============================== */
     /* ================================================================================ */
     // Attributs accéléromètre
     private Sensor accelerometer;
@@ -53,13 +53,14 @@ public class PlayActivity extends ActionBarActivity implements SensorEventListen
     private boolean mAutoDecrement = false;
     private int mVitesse;
     private static int REP_DELAY = 50;
-    // Attributs connexion RPI et envoi de données
+    // Attributs mise en forme des données
     private TextView tvDonnees;
-    public static boolean flagPlayActivity;
+    // Attribus connexion RPI et envoi de données
     public Socket mySocket = null;
     public static final int SERVERPORT = 40450;
     public static final String SERVER_IP = "192.168.43.238";
     public DataOutputStream os = null;
+    public static boolean flagPlayActivity;
 
     // Thread qui s'exécute en parallèle : gère la vitesse
     class RptUpdater implements Runnable
@@ -76,9 +77,6 @@ public class PlayActivity extends ActionBarActivity implements SensorEventListen
                 }
                 else repeatUpdateHandler.postDelayed(new RptUpdater(), REP_DELAY);
             }
-
-
-                   
 
             // Relache avancer OU Appuie reculer
             else if((mVitesse > 0 && !mAutoIncrement) || (mVitesse <= 0 && mAutoDecrement))
@@ -101,7 +99,7 @@ public class PlayActivity extends ActionBarActivity implements SensorEventListen
         setContentView(R.layout.activity_play);
 
         /* ================================================================================ */
-        /* =============== INSTANCIATION VARIABLES =============== */
+        /* =========================== INSTANCIATION VARIABLES ============================ */
         /* ================================================================================ */
         // accéléromètre
         sm = (SensorManager)getSystemService(SENSOR_SERVICE);
@@ -118,13 +116,13 @@ public class PlayActivity extends ActionBarActivity implements SensorEventListen
         tvDonnees = (TextView) findViewById(R.id.tv_donnees);
 
         /* ================================================================================ */
-        /* =============== CONNEXION RASPBERRY et ENVOIE DE DONNEES =============== */
+        /* =================== CONNEXION RASPBERRY et ENVOIE DE DONNEES =================== */
         /* ================================================================================ */
         connectrpi();
         flagPlayActivity = true;
 
         /* ================================================================================ */
-        /* =============== GESTION BOUTONS =============== */
+        /* ================================ GESTION BOUTONS =============================== */
         /* ================================================================================ */
         // Bouton Avancer
         ibAvancer.setOnLongClickListener
@@ -190,22 +188,22 @@ public class PlayActivity extends ActionBarActivity implements SensorEventListen
     }
 
     /* ================================================================================ */
-    /* =============== GESTION DE lA VITESSE =============== */
+    /* =========================== GESTION DE lA VITESSE ============================== */
     /* ================================================================================ */
     // Fonctions gestion affichage vitesse
     public void increment()
     {
         mVitesse++;
-        tvVitesse.setText("" + mVitesse + "%");
+        tvVitesse.setText("Vitesse : " + mVitesse + "%");
     }
     public void decrement()
     {
         mVitesse--;
-        tvVitesse.setText("" + mVitesse + "%");
+        tvVitesse.setText("Vitesse : " + mVitesse + "%");
     }
 
     /* ================================================================================ */
-    /* =============== GESTION DE l'ACCELEROMETRE =============== */
+    /* ============================ GESTION DE l'ACCELEROMETRE ======================== */
     /* ================================================================================ */
     // Met à jour les coordonnées XYZ uniquement sur changement sensor
     @Override
@@ -240,7 +238,30 @@ public class PlayActivity extends ActionBarActivity implements SensorEventListen
     }
 
     /* ================================================================================ */
-    /* =============== CONNEXION RASPBERRY ET ENVOI DE DONNEES =============== */
+    /* ============================ MISE EN FORME DES DONNEES ========================= */
+    /* ================================================================================ */
+    // Obtenir adresse MAC du smartphone
+    public String getAdresseMac()
+    {
+        WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        WifiInfo info = manager.getConnectionInfo();
+        return info.getMacAddress();
+    }
+
+    // Met sous la bonne forme pour envoi de données accéléromètre
+    public String getValuesAccelerometer()
+    {
+        int yFloor = (int) Math.floor(yAngle); // Arrondi de l'angle y
+        String valuesAccelerometer = "";
+
+        valuesAccelerometer = getAdresseMac() + "&moteur&" + mVitesse + "*" + yFloor;
+
+        //tvDonnees.setText(valuesAccelerometer);
+        return valuesAccelerometer;
+    }
+
+    /* ================================================================================ */
+    /* ==================== CONNEXION RASPBERRY ET ENVOI DE DONNEES =================== */
     /* ================================================================================ */
     // Fonction connexion smartphone à RPI et envoi de données (mal optimisé)
     public void connectrpi() {new Thread(new ClientThread()).start();}
@@ -272,28 +293,4 @@ public class PlayActivity extends ActionBarActivity implements SensorEventListen
             }
         }
     } // Fin ClientThread
-
-
-    /* ================================================================================ */
-    /* =============== ENVOI DE DONNEES =============== */
-    /* ================================================================================ */
-    // Obtenir adresse MAC du smartphone
-    public String getAdresseMac()
-    {
-        WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        WifiInfo info = manager.getConnectionInfo();
-        return info.getMacAddress();
-    }
-
-    // Met sous la bonne forme pour envoi de données accéléromètre
-    public String getValuesAccelerometer()
-    {
-        int yFloor = (int) Math.floor(yAngle); // Arrondi de l'angle y
-        String valuesAccelerometer = "";
-
-        valuesAccelerometer = getAdresseMac() + "&moteur&" + mVitesse + "*" + yFloor;
-
-        //tvDonnees.setText(valuesAccelerometer);
-        return valuesAccelerometer;
-    }
 }

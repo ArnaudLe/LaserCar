@@ -49,8 +49,8 @@ public class SettingsActivity extends ActionBarActivity
 
         //On refait la manip plusieurs fois avec des données différentes pour former les items de notre ListView
         map = new HashMap<String, String>();
-        map.put("titre", "Paramètres");
-        map.put("description", "Modifiez les paramètres du smartphone");
+        map.put("titre", "Paramètres WIFI");
+        map.put("description", "Modifiez les paramètres WIFI du smartphone");
         map.put("img", String.valueOf(R.drawable.ic_launcher));
         listItem.add(map);
 

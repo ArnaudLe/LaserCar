@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- ======================================== -->
+    <!-- ======= GENERAL - TITRE ACTIVITES ====== -->
+    <!-- ======================================== -->
     <string name="app_name">Laser Car</string>
     <string name="action_settings">Settings</string>
-    <string name="play">Jouer !</string>
-    <string name="settings">Options</string>
-    <string name="about">A propos</string>
     <string name="title_activity_play">PlayActivity</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_settings">Paramètres</string>
+
+
+    <!-- ======================================== -->
+    <!-- ============= HOMEACTIVITY ============= -->
+    <!-- ======================================== -->
+    <string name="footer">Laser Car Project - Parrot Awards &amp; ESIEE Paris - Version 0.4</string>
+
 
 </resources>
