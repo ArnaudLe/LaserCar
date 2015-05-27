@@ -58,7 +58,7 @@ public class PlayActivity extends Activity implements SensorEventListener
     // Attribus connexion RPI et envoi de données
     public Socket mySocket = null;
     public static final int SERVERPORT = 40450;
-    public static final String SERVER_IP = "192.168.43.238";
+    public static final String SERVER_IP = "10.5.5.1";
     public DataOutputStream os = null;
     public static boolean flagPlayActivity;
 
@@ -90,6 +90,7 @@ public class PlayActivity extends Activity implements SensorEventListener
             }
         }
     } // Fin thread
+
 
     // Redéfinition de la fonction principale
     @Override
