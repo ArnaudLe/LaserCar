@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Données"
+        android:text="Laser : 0s"
         android:id="@+id/tv_donnees" />
 
     <LinearLayout
@@ -89,10 +89,11 @@
         <ImageButton
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/ib_tirer"
-            android:src="@drawable/button_tirer"
+            android:id="@+id/ib_laser"
+            android:src="@drawable/button_laser"
             android:background="#00000000"
             android:padding="10dp"
+
             android:layout_weight="1" />
 
     </LinearLayout>
