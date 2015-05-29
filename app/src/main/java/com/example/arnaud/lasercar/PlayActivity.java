@@ -48,16 +48,11 @@ public class PlayActivity extends Activity implements SensorEventListener
     private ImageButton ibAvancer;
     private ImageButton ibReculer;
     private TextView tvVitesse;
-    private Handler repeatUpdateHandlerVitesse = new Handler();
-    private boolean mAutoIncrement = false; // indique moteur état Avancer ou Reculer
+    private Handler repeatUpdateHandler = new Handler();
+    private boolean mAutoIncrement = false; // indique état Avancer ou Reculer
     private boolean mAutoDecrement = false;
     private int mVitesse;
     private static int REP_DELAY = 25;
-    // Attributs laser
-    private Handler repeatUpdateHandlerLaser = new Handler();
-    private ImageButton ibLaser;
-    private boolean lAutoIncrement = false; // indique laser état Tirer ou non
-    private int timeLaser;
     // Attributs mise en forme des données
     private TextView tvDonnees;
     // Attribus connexion RPI et envoi de données
@@ -68,7 +63,7 @@ public class PlayActivity extends Activity implements SensorEventListener
     public static boolean flagPlayActivity;
 
     // Thread qui s'exécute en parallèle : gère la vitesse
-    class RptUpdaterVitesse implements Runnable
+    class RptUpdater implements Runnable
     {
         public void run()
         {
@@ -78,9 +73,9 @@ public class PlayActivity extends Activity implements SensorEventListener
                 if(mVitesse < 100)
                 {
                     increment();
-                    repeatUpdateHandlerVitesse.postDelayed(new RptUpdaterVitesse(), REP_DELAY);
+                    repeatUpdateHandler.postDelayed(new RptUpdater(), REP_DELAY);
                 }
-                else repeatUpdateHandlerVitesse.postDelayed(new RptUpdaterVitesse(), REP_DELAY);
+                else repeatUpdateHandler.postDelayed(new RptUpdater(), REP_DELAY);
             }
 
             // Relache avancer OU Appuie reculer
@@ -89,41 +84,12 @@ public class PlayActivity extends Activity implements SensorEventListener
                 if(mVitesse > -100)
                 {
                     decrement();
-                    repeatUpdateHandlerVitesse.postDelayed(new RptUpdaterVitesse(), REP_DELAY);
+                    repeatUpdateHandler.postDelayed(new RptUpdater(), REP_DELAY);
                 }
-                else repeatUpdateHandlerVitesse.postDelayed(new RptUpdaterVitesse(), REP_DELAY);
+                else repeatUpdateHandler.postDelayed(new RptUpdater(), REP_DELAY);
             }
         }
-    } // Fin thread vitesse
-
-    // Thread qui s'exécute en parallèle : gère le laser
-    class RptUpdaterLaser implements Runnable
-    {
-        public void run()
-        {
-            // Appuie sur tirer
-            if(lAutoIncrement)
-            {
-                if(timeLaser < 2000/REP_DELAY) // Stop à 2 secondes
-                {
-                    incrementLaser();
-                    repeatUpdateHandlerLaser.postDelayed(new RptUpdaterLaser(), REP_DELAY);
-                }
-                else repeatUpdateHandlerLaser.postDelayed(new RptUpdaterLaser(), REP_DELAY);
-            }
-
-            // Relache tirer
-            else if(!lAutoIncrement)
-            {
-                if(timeLaser > 0)  // Stop à 0 secondes
-                {
-                    decrementLaser();
-                    repeatUpdateHandlerLaser.postDelayed(new RptUpdaterLaser(), REP_DELAY);
-                }
-                else repeatUpdateHandlerLaser.postDelayed(new RptUpdaterLaser(), REP_DELAY);
-            }
-        }
-    } // Fin thread laser
+    } // Fin thread
 
 
     // Redéfinition de la fonction principale
@@ -147,13 +113,11 @@ public class PlayActivity extends Activity implements SensorEventListener
         tvVitesse = (TextView) findViewById(R.id.tv_vitesse);
         ibAvancer = (ImageButton) findViewById(R.id.ib_avancer);
         ibReculer = (ImageButton) findViewById(R.id.ib_reculer);
-        // laser
-        ibLaser = (ImageButton) findViewById(R.id.ib_laser);
         // envoi de données
         tvDonnees = (TextView) findViewById(R.id.tv_donnees);
 
         /* ================================================================================ */
-        /* =================== CONNEXION RASPBERRY ET ENVOIE DE DONNEES =================== */
+        /* =================== CONNEXION RASPBERRY et ENVOIE DE DONNEES =================== */
         /* ================================================================================ */
         connectrpi();
         flagPlayActivity = true;
@@ -169,7 +133,7 @@ public class PlayActivity extends Activity implements SensorEventListener
                             public boolean onLongClick(View arg0)
                             {
                                 mAutoIncrement = true;
-                                repeatUpdateHandlerVitesse.post(new RptUpdaterVitesse());
+                                repeatUpdateHandler.post(new RptUpdater());
                                 return false;
                             }
                         }
@@ -197,7 +161,7 @@ public class PlayActivity extends Activity implements SensorEventListener
                             public boolean onLongClick(View arg0)
                             {
                                 mAutoDecrement = true;
-                                repeatUpdateHandlerVitesse.post(new RptUpdaterVitesse());
+                                repeatUpdateHandler.post(new RptUpdater());
                                 return false;
                             }
                         }
@@ -216,36 +180,6 @@ public class PlayActivity extends Activity implements SensorEventListener
                             }
                         }
                 );
-
-        /* ================================================================================ */
-        /* ============================= GESTION BOUTON LASER ============================= */
-        /* ================================================================================ */
-        ibLaser.setOnLongClickListener
-                (
-                        new View.OnLongClickListener()
-                        {
-                            public boolean onLongClick(View arg0)
-                            {
-                                lAutoIncrement = true;
-                                repeatUpdateHandlerLaser.post(new RptUpdaterLaser());
-                                return false;
-                            }
-                        }
-                );
-        ibLaser.setOnTouchListener
-                (
-                        new View.OnTouchListener()
-                        {
-                            public boolean onTouch(View v, MotionEvent event)
-                            {
-                                if ((event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) && lAutoIncrement)
-                                {
-                                    lAutoIncrement = false;
-                                }
-                                return false;
-                            }
-                        }
-                );
     } // Fin onCreate : fonction principale
 
     // Redéfinition nécessaire pour pouvoir utiliser l'accéléromètre
@@ -255,9 +189,9 @@ public class PlayActivity extends Activity implements SensorEventListener
     }
 
     /* ================================================================================ */
-    /* =========================== GESTION DE LA VITESSE ============================== */
+    /* =========================== GESTION DE lA VITESSE ============================== */
     /* ================================================================================ */
-    // Fonctions gestion incrémentation et affichage vitesse
+    // Fonctions gestion affichage vitesse
     public void increment()
     {
         mVitesse++;
@@ -270,7 +204,7 @@ public class PlayActivity extends Activity implements SensorEventListener
     }
 
     /* ================================================================================ */
-    /* ============================ GESTION DE L'ACCELEROMETRE ======================== */
+    /* ============================ GESTION DE l'ACCELEROMETRE ======================== */
     /* ================================================================================ */
     // Met à jour les coordonnées XYZ uniquement sur changement sensor
     @Override
@@ -302,21 +236,6 @@ public class PlayActivity extends Activity implements SensorEventListener
         tvAccelerometerX.setText("X : " + x);
         tvAccelerometerY.setText("Y : " + y);
         tvAccelerometerZ.setText("Z : " + z);
-    }
-
-    /* ================================================================================ */
-    /* ================================= GESTION DU LASER ============================= */
-    /* ================================================================================ */
-    // Fonctions gestion incrémentation et affichage laser
-    public void incrementLaser()
-    {
-        timeLaser++;
-        tvDonnees.setText("Laser : " + timeLaser + "s");
-    }
-    public void decrementLaser()
-    {
-        timeLaser--;
-        tvDonnees.setText("Laser : " + timeLaser + "s");
     }
 
     /* ================================================================================ */
