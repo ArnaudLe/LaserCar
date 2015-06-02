@@ -41,18 +41,18 @@ public class PlayActivity extends Activity implements SensorEventListener
     private ImageButton ibAvancer;
     private ImageButton ibReculer;
     private TextView tvVitesse;
-    private Handler repeatUpdateHandlerVitesse = new Handler();
+    private Handler handlerVitesse = new Handler();
     private boolean mAutoIncrement = false; // indique moteur état Avancer ou Reculer
     private boolean mAutoDecrement = false;
     private int mVitesse = 0;
-    private static int REP_DELAY = 25;
+    private static int DELAY = 25;
     // Attributs laser
-    private Handler repeatUpdateHandlerLaser = new Handler();
+    private Handler handlerLaser = new Handler();
     private ImageButton ibLaser;
     private boolean lAutoIncrement = false; // indique laser état Tirer ou non
     private int timeLaser = 0;
     // Attributs mise en forme des données
-    private TextView tvDonnees;
+    private TextView tvLaser;
     // Attribus connexion RPI et envoi de données
     public Socket mySocket = null;
     public static final int SERVERPORT = 40450;
@@ -70,9 +70,9 @@ public class PlayActivity extends Activity implements SensorEventListener
                 if(mVitesse < 100)
                 {
                     increment();
-                    repeatUpdateHandlerVitesse.postDelayed(new RptUpdaterVitesse(), REP_DELAY);
+                    handlerVitesse.postDelayed(new RptUpdaterVitesse(), DELAY);
                 }
-                else repeatUpdateHandlerVitesse.postDelayed(new RptUpdaterVitesse(), REP_DELAY);
+                else handlerVitesse.postDelayed(new RptUpdaterVitesse(), DELAY);
             }
 
             // Relache avancer OU Appuie reculer
@@ -81,9 +81,9 @@ public class PlayActivity extends Activity implements SensorEventListener
                 if(mVitesse > -100)
                 {
                     decrement();
-                    repeatUpdateHandlerVitesse.postDelayed(new RptUpdaterVitesse(), REP_DELAY);
+                    handlerVitesse.postDelayed(new RptUpdaterVitesse(), DELAY);
                 }
-                else repeatUpdateHandlerVitesse.postDelayed(new RptUpdaterVitesse(), REP_DELAY);
+                else handlerVitesse.postDelayed(new RptUpdaterVitesse(), DELAY);
             }
         }
     } // Fin thread vitesse
@@ -96,17 +96,12 @@ public class PlayActivity extends Activity implements SensorEventListener
             // Appuie sur tirer
             if(lAutoIncrement)
             {
-                if(timeLaser < 2000/REP_DELAY) // Stop à 2 secondes
+                if(timeLaser < 2000/DELAY) // Stop à 2 secondes
                 {
                     incrementLaser();
-                    repeatUpdateHandlerLaser.postDelayed(new RptUpdaterLaser(), REP_DELAY);
-                    Log.d("MyTagThread", "Increment + RptUpdtaterLaser");
+                    handlerLaser.postDelayed(new RptUpdaterLaser(), DELAY);
                 }
-                else
-                {
-                    repeatUpdateHandlerLaser.postDelayed(new RptUpdaterLaser(), REP_DELAY);
-                    Log.d("MyTagThread", "Only Increment RptUpdtaterLaser");
-                }
+                else handlerLaser.postDelayed(new RptUpdaterLaser(), DELAY);
             }
 
             // Relache tirer
@@ -115,12 +110,12 @@ public class PlayActivity extends Activity implements SensorEventListener
                 if(timeLaser > 0)  // Stop à 0 secondes
                 {
                     decrementLaser();
-                    repeatUpdateHandlerLaser.postDelayed(new RptUpdaterLaser(), REP_DELAY);
+                    handlerLaser.postDelayed(new RptUpdaterLaser(), DELAY);
                     Log.d("MyTagThread", "Decrement + RptUpdtaterLaser");
                 }
-                else if(timeLaser > 0 && timeLaser < 100)
+                else if(timeLaser > 0 && timeLaser < 100) // Exclu le cas où timeLaser == 0
                 {
-                    repeatUpdateHandlerLaser.postDelayed(new RptUpdaterLaser(), REP_DELAY);
+                    handlerLaser.postDelayed(new RptUpdaterLaser(), DELAY);
                     Log.d("MyTagThread", "Only Decrement RptUpdtaterLaser");
                 }
             }
@@ -152,7 +147,7 @@ public class PlayActivity extends Activity implements SensorEventListener
         // laser
         ibLaser = (ImageButton) findViewById(R.id.ib_laser);
         // envoi de données
-        tvDonnees = (TextView) findViewById(R.id.tv_donnees);
+        tvLaser = (TextView) findViewById(R.id.tv_laser);
 
         /* ================================================================================ */
         /* =================== CONNEXION RASPBERRY ET ENVOIE DE DONNEES =================== */
@@ -171,7 +166,7 @@ public class PlayActivity extends Activity implements SensorEventListener
                             public boolean onLongClick(View arg0)
                             {
                                 mAutoIncrement = true;
-                                repeatUpdateHandlerVitesse.post(new RptUpdaterVitesse());
+                                handlerVitesse.post(new RptUpdaterVitesse());
                                 return false;
                             }
                         }
@@ -199,7 +194,7 @@ public class PlayActivity extends Activity implements SensorEventListener
                             public boolean onLongClick(View arg0)
                             {
                                 mAutoDecrement = true;
-                                repeatUpdateHandlerVitesse.post(new RptUpdaterVitesse());
+                                handlerVitesse.post(new RptUpdaterVitesse());
                                 return false;
                             }
                         }
@@ -229,7 +224,7 @@ public class PlayActivity extends Activity implements SensorEventListener
                             public boolean onLongClick(View arg0)
                             {
                                 lAutoIncrement = true;
-                                repeatUpdateHandlerLaser.post(new RptUpdaterLaser());
+                                handlerLaser.post(new RptUpdaterLaser());
                                 return false;
                             }
                         }
@@ -263,13 +258,11 @@ public class PlayActivity extends Activity implements SensorEventListener
     public void increment()
     {
         mVitesse++;
-        Log.d("MyTag", "incrémentation vitesse");
         tvVitesse.setText("Vitesse : " + mVitesse + "%");
     }
     public void decrement()
     {
         mVitesse--;
-        Log.d("MyTag", "décrémentation vitesse");
         tvVitesse.setText("Vitesse : " + mVitesse + "%");
     }
 
@@ -315,14 +308,12 @@ public class PlayActivity extends Activity implements SensorEventListener
     public void incrementLaser()
     {
         timeLaser++;
-        Log.d("MyTag", "incrémentation laser");
-        tvDonnees.setText("Laser : " + timeLaser + "s");
+        tvLaser.setText("Laser : " + timeLaser + "s");
     }
     public void decrementLaser()
     {
         timeLaser--;
-        Log.d("MyTag", "décrémentation laser");
-        tvDonnees.setText("Laser : " + timeLaser + "s");
+        tvLaser.setText("Laser : " + timeLaser + "s");
     }
 
     /* ================================================================================ */

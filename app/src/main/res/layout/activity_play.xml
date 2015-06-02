@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Laser : 0s"
-        android:id="@+id/tv_donnees" />
+        android:id="@+id/tv_laser" />
 
     <LinearLayout
         android:orientation="horizontal"
