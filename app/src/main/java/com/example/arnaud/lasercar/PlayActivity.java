@@ -10,24 +10,17 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.os.Handler;
-
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class PlayActivity extends Activity implements SensorEventListener
@@ -51,20 +44,19 @@ public class PlayActivity extends Activity implements SensorEventListener
     private Handler repeatUpdateHandlerVitesse = new Handler();
     private boolean mAutoIncrement = false; // indique moteur état Avancer ou Reculer
     private boolean mAutoDecrement = false;
-    private int mVitesse;
+    private int mVitesse = 0;
     private static int REP_DELAY = 25;
     // Attributs laser
     private Handler repeatUpdateHandlerLaser = new Handler();
     private ImageButton ibLaser;
     private boolean lAutoIncrement = false; // indique laser état Tirer ou non
-    private int timeLaser;
+    private int timeLaser = 0;
     // Attributs mise en forme des données
     private TextView tvDonnees;
     // Attribus connexion RPI et envoi de données
     public Socket mySocket = null;
     public static final int SERVERPORT = 40450;
     public static final String SERVER_IP = "10.5.5.1";
-    public DataOutputStream os = null;
     public static boolean flagPlayActivity;
 
     // Thread qui s'exécute en parallèle : gère la vitesse
@@ -108,19 +100,29 @@ public class PlayActivity extends Activity implements SensorEventListener
                 {
                     incrementLaser();
                     repeatUpdateHandlerLaser.postDelayed(new RptUpdaterLaser(), REP_DELAY);
+                    Log.d("MyTagThread", "Increment + RptUpdtaterLaser");
                 }
-                else repeatUpdateHandlerLaser.postDelayed(new RptUpdaterLaser(), REP_DELAY);
+                else
+                {
+                    repeatUpdateHandlerLaser.postDelayed(new RptUpdaterLaser(), REP_DELAY);
+                    Log.d("MyTagThread", "Only Increment RptUpdtaterLaser");
+                }
             }
 
             // Relache tirer
-            else if(!lAutoIncrement)
+            else
             {
                 if(timeLaser > 0)  // Stop à 0 secondes
                 {
                     decrementLaser();
                     repeatUpdateHandlerLaser.postDelayed(new RptUpdaterLaser(), REP_DELAY);
+                    Log.d("MyTagThread", "Decrement + RptUpdtaterLaser");
                 }
-                else repeatUpdateHandlerLaser.postDelayed(new RptUpdaterLaser(), REP_DELAY);
+                else if(timeLaser > 0 && timeLaser < 100)
+                {
+                    repeatUpdateHandlerLaser.postDelayed(new RptUpdaterLaser(), REP_DELAY);
+                    Log.d("MyTagThread", "Only Decrement RptUpdtaterLaser");
+                }
             }
         }
     } // Fin thread laser
@@ -261,11 +263,13 @@ public class PlayActivity extends Activity implements SensorEventListener
     public void increment()
     {
         mVitesse++;
+        Log.d("MyTag", "incrémentation vitesse");
         tvVitesse.setText("Vitesse : " + mVitesse + "%");
     }
     public void decrement()
     {
         mVitesse--;
+        Log.d("MyTag", "décrémentation vitesse");
         tvVitesse.setText("Vitesse : " + mVitesse + "%");
     }
 
@@ -292,7 +296,7 @@ public class PlayActivity extends Activity implements SensorEventListener
         xAngle *= 180.00;   yAngle *= 180.00;   zAngle *= 180.00;
         xAngle /= 3.141592; yAngle /= 3.141592; zAngle /= 3.141592;
 
-        PositionAccelerometer(xAngle, yAngle, zAngle);
+        // PositionAccelerometer(xAngle, yAngle, zAngle);
         // setFormMotorAngle();
     }
 
@@ -311,11 +315,13 @@ public class PlayActivity extends Activity implements SensorEventListener
     public void incrementLaser()
     {
         timeLaser++;
+        Log.d("MyTag", "incrémentation laser");
         tvDonnees.setText("Laser : " + timeLaser + "s");
     }
     public void decrementLaser()
     {
         timeLaser--;
+        Log.d("MyTag", "décrémentation laser");
         tvDonnees.setText("Laser : " + timeLaser + "s");
     }
 
@@ -349,7 +355,7 @@ public class PlayActivity extends Activity implements SensorEventListener
     public void connectrpi() {new Thread(new ClientThread()).start();}
 
     // Thread qui gère la connexion et l'envoi de données
-    class ClientThread extends TimerTask implements Runnable
+    class ClientThread implements Runnable
     {
         @Override
         public void run()
@@ -375,4 +381,23 @@ public class PlayActivity extends Activity implements SensorEventListener
             }
         }
     } // Fin ClientThread
+
+
+    /*
+    public void sendLaser(View view)
+    {
+        try {
+            String str = "hello";
+            PrintWriter out = new PrintWriter(new BufferedWriter(
+                    new OutputStreamWriter(mySocket.getOutputStream())),
+                    true);
+            out.println(str);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }*/
 }
