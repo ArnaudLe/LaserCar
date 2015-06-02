@@ -100,6 +100,7 @@
             android:src="@drawable/button_laser"
             android:background="#00000000"
             android:padding="10dp"
+            android:onClick="sendLaser"
             android:layout_weight="1" />
 
     </LinearLayout>

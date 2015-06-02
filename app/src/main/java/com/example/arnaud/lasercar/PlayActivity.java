@@ -16,11 +16,16 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.os.Handler;
+
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 
 public class PlayActivity extends Activity implements SensorEventListener
@@ -113,12 +118,10 @@ public class PlayActivity extends Activity implements SensorEventListener
                 {
                     decrement("laser");
                     handlerLaser.postDelayed(new RptUpdaterLaser(), DELAY);
-                    Log.d("MyTagThread", "Decrement + RptUpdtaterLaser");
                 }
                 else if(timeLaser > 0 && timeLaser < 100) // Exclu le cas où timeLaser == 0
                 {
                     handlerLaser.postDelayed(new RptUpdaterLaser(), DELAY);
-                    Log.d("MyTagThread", "Only Decrement RptUpdtaterLaser");
                 }
             }
         }
@@ -392,11 +395,10 @@ public class PlayActivity extends Activity implements SensorEventListener
         }
     } // Fin ClientThread
 
-
     /* ================================================================================ */
     /* ========================== ENVOI DE DONNEES LASER ============================== */
     /* ================================================================================ */
-    /*public void sendLaser(View view)
+    public void sendLaser(View view)
     {
         try {
             String str = "hello";
@@ -404,12 +406,8 @@ public class PlayActivity extends Activity implements SensorEventListener
                     new OutputStreamWriter(mySocket.getOutputStream())),
                     true);
             out.println(str);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }*/
+    }
 }
