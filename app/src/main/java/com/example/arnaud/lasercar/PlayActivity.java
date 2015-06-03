@@ -10,6 +10,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -124,7 +125,7 @@ public class PlayActivity extends Activity implements SensorEventListener
                     handlerLaser.postDelayed(new RptUpdaterLaser(), DELAY);
                 }
             }
-            sendLaser();
+            sendLaser(); // envoi données laser tant que l'on reste appuyé sur le bouton laser
         }
     } // Fin thread laser
 
@@ -158,7 +159,7 @@ public class PlayActivity extends Activity implements SensorEventListener
         tvTest = (TextView) findViewById(R.id.tv_test);
 
         /* ================================================================================ */
-        /* =================== CONNEXION RASPBERRY ET ENVOIE DE DONNEES =================== */
+        /* =============== CONNEXION RASPBERRY ET ENVOIE DE DONNEES VITESSE =============== */
         /* ================================================================================ */
         connectrpi();
         flagPlayActivity = true;
@@ -330,12 +331,11 @@ public class PlayActivity extends Activity implements SensorEventListener
     /* ================================================================================ */
     /* =================== MISE EN FORME DES DONNEES (VITESSE + LASER) ================ */
     /* ================================================================================ */
-    // Obtenir adresse MAC du smartphone
-    public String getAdresseMac()
+    // Obtenir adresse IP du smartphone
+    public String getAdresseIP()
     {
-        WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        WifiInfo info = manager.getConnectionInfo();
-        return info.getMacAddress();
+        WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
+        return Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
     }
 
     // Met sous la bonne forme pour envoi de données moteur + angle (vitesse)
@@ -344,7 +344,7 @@ public class PlayActivity extends Activity implements SensorEventListener
         int yFloor = (int) Math.floor(yAngle); // Arrondi de l'angle y
         String data = "";
 
-        data = getAdresseMac() + "&moteur&" + mVitesse + "*" + yFloor;
+        data = getAdresseIP() + "&moteur&" + mVitesse + "*" + yFloor;
 
         //tvTest.setText(data);
         return data;
@@ -355,8 +355,8 @@ public class PlayActivity extends Activity implements SensorEventListener
     {
         String data = "";
 
-        if(timeLaser > 0 && timeLaser < 2000/DELAY) data = getAdresseMac() + "&laser&" + "ON";
-        else if(timeLaser == 0 || timeLaser == 2000/DELAY) data = getAdresseMac() + "&laser&" + "OFF";
+        if(timeLaser > 0 && timeLaser < 2000/DELAY && lAutoIncrement) data = getAdresseIP() + "&laser&" + "ON";
+        else data = getAdresseIP() + "&laser&" + "OFF"; // Laser OFF si on est à 0 ou à 2sec ou en décrémentation
 
         //tvTest.setText(data);
         return data;
