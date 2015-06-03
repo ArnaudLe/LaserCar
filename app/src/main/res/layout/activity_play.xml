@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Vitessse : 0%"
+        android:text="Vitesse : 0%"
         android:id="@+id/tv_vitesse" />
 
     <TextView
@@ -17,7 +17,14 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Laser : 0s"
-        android:id="@+id/tv_donnees" />
+        android:id="@+id/tv_laser" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Test"
+        android:id="@+id/tv_test" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -93,7 +100,6 @@
             android:src="@drawable/button_laser"
             android:background="#00000000"
             android:padding="10dp"
-
             android:layout_weight="1" />
 
     </LinearLayout>
