@@ -124,6 +124,7 @@ public class PlayActivity extends Activity implements SensorEventListener
                     handlerLaser.postDelayed(new RptUpdaterLaser(), DELAY);
                 }
             }
+            sendLaser();
         }
     } // Fin thread laser
 
@@ -398,7 +399,7 @@ public class PlayActivity extends Activity implements SensorEventListener
     /* ================================================================================ */
     /* ========================== ENVOI DE DONNEES LASER ============================== */
     /* ================================================================================ */
-    public void sendLaser(View view)
+    public void sendLaser()
     {
         try {
             String data = setFormLaser();
