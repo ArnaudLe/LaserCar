@@ -315,7 +315,7 @@ public class PlayActivity extends Activity implements SensorEventListener
 
         // PositionAccelerometer(xAngle, yAngle, zAngle);
         // setFormMotorAngle();
-        setFormLaser();
+        // setFormLaser();
     }
 
     // Affiche les coordonnéees XYZ de l'accéléromètre
@@ -401,11 +401,11 @@ public class PlayActivity extends Activity implements SensorEventListener
     public void sendLaser(View view)
     {
         try {
-            String str = "hello";
+            String data = setFormLaser();
             PrintWriter out = new PrintWriter(new BufferedWriter(
                     new OutputStreamWriter(mySocket.getOutputStream())),
                     true);
-            out.println(str);
+            out.println(data);
         } catch (Exception e) {
             e.printStackTrace();
         }
