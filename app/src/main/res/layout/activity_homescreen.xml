@@ -38,14 +38,14 @@
             android:layout_height="wrap_content"
             android:background="#00000000"
             android:onClick="playMessage"
-            android:src="@drawable/selector_btn_home_play"
+            android:src="@drawable/sct_btn_home_play"
             android:padding="15dp" />
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/imageButton_settings"
-            android:src="@drawable/btn_home_settings"
+            android:src="@drawable/sct_btn_home_settings"
             android:background="#00000000"
             android:onClick="settingsMessage"
             android:padding="10dp" />
