@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Bouton pressé -->
+    <item
+        android:state_pressed="true"
+        android:state_enabled="true"
+        android:drawable="@drawable/btn_play_reculer_pressed" />
+    <!-- Bouton non pressé -->
+    <item
+        android:state_enabled="true"
+        android:drawable="@drawable/btn_play_reculer" />
+</selector>

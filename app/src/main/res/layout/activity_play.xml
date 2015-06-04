@@ -42,16 +42,17 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/ib_avancer"
-                android:src="@drawable/btn_play_avancer"
+                android:src="@drawable/sct_btn_play_avancer"
                 android:background="#00000000"
                 android:padding="10dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:adjustViewBounds="true" />
 
             <ImageButton
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/ib_reculer"
-                android:src="@drawable/btn_play_reculer"
+                android:src="@drawable/sct_btn_play_reculer"
                 android:background="#00000000"
                 android:padding="10dp"
                 android:layout_weight="1" />
@@ -62,7 +63,7 @@
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1.15"
+            android:layout_weight="1.18"
             android:gravity="center">
 
             <TextView
@@ -100,7 +101,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/ib_laser"
-            android:src="@drawable/btn_play_laser"
+            android:src="@drawable/sct_btn_play_laser"
             android:background="#00000000"
             android:padding="10dp"
             android:layout_weight="1" />
