@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:gauge="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/play_background"
+    android:background="@drawable/img_play_background"
     android:weightSum="1"
     android:gravity="center">
 
@@ -42,16 +44,17 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/ib_avancer"
-                android:src="@drawable/button_avancer"
+                android:src="@drawable/sct_btn_play_avancer"
                 android:background="#00000000"
                 android:padding="10dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:adjustViewBounds="true" />
 
             <ImageButton
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/ib_reculer"
-                android:src="@drawable/button_reculer"
+                android:src="@drawable/sct_btn_play_reculer"
                 android:background="#00000000"
                 android:padding="10dp"
                 android:layout_weight="1" />
@@ -62,33 +65,36 @@
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="1.18"
             android:gravity="center">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="X : "
-                android:id="@+id/tv_accelerometerX"
+                android:text="Joueur 1"
+                android:id="@+id/tv_pseudo"
                 android:layout_weight="1"
-                android:gravity="center" />
+                android:gravity="center"
+                android:textSize="20sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Y : "
-                android:id="@+id/tv_accelerometerY"
+                android:text="Score : "
+                android:id="@+id/tv_score"
                 android:layout_weight="1"
-                android:gravity="center" />
+                android:gravity="center"
+                android:textSize="39sp"
+                android:textColor="@color/red" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Z : "
-                android:id="@+id/tv_accelerometerZ"
+                android:text=""
+                android:id="@+id/tv_info"
                 android:layout_weight="1"
                 android:gravity="center" />
         </LinearLayout>
@@ -97,7 +103,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/ib_laser"
-            android:src="@drawable/button_laser"
+            android:src="@drawable/sct_btn_play_laser"
             android:background="#00000000"
             android:padding="10dp"
             android:layout_weight="1" />
