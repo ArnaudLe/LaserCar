@@ -15,4 +15,15 @@
     <!-- ======================================== -->
     <string name="footer">Laser Car Project - Parrot Awards &amp; ESIEE Paris - Version 0.7</string>
 
+    <!-- ======================================== -->
+    <!-- ============= HOWTOPLAYACTIVITY ============= -->
+    <!-- ======================================== -->
+    <string name="but">BUT DU JEU</string>
+    <string name="but_texte1">Le but du jeu est d’avoir le plus grand nombre de points à la fin de la partie.
+    Chaque joueur perd un point lorsqu’il reçoit un tir laser provenant d’un de ses adversaires (autokill et tirs multiples sur la même cible non traités) et gagne deux points lorsqu’il touche un adversaire.
+    Chaque joueur peut “tirer” depuis l’application durant un temps limité.</string>
+
+    <string name="but_texte2">A la fin du temps de jeu, la partie s’arrête et le tableau des scores est affiché.
+    Le terrain de jeu en intérieur sera conseillé pour permettre des tirs droits et la bonne réception des tirs.</string>
+
 </resources>

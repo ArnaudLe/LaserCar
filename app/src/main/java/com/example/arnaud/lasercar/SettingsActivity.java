@@ -65,8 +65,8 @@ public class SettingsActivity extends ActionBarActivity
         /* =============================== PARAMETRES WIFI ================================ */
         /* ================================================================================ */
         map = new HashMap<String, String>();
-        map.put("titre", "Paramètres WIFI");
-        map.put("description", "Connectez-vous au WIFI Cyclope");
+        map.put("titre", "Paramètres Wi-Fi");
+        map.put("description", "Connectez-vous au Wi-Fi Cyclope");
         map.put("img", String.valueOf(R.drawable.ic_settings_wifi));
         listItem.add(map);
 
