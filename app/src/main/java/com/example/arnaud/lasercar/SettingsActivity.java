@@ -36,22 +36,38 @@ public class SettingsActivity extends ActionBarActivity
         //On déclare la HashMap qui contiendra les informations pour un item
         HashMap<String, String> map;
 
+        /* ================================================================================ */
+        /* =============================== COMMENT JOUER ? ================================ */
+        /* ================================================================================ */
         //Création d'une HashMap pour insérer les informations du premier item de notre listView
         map = new HashMap<String, String>();
         //on insère un élément titre que l'on récupérera dans le textView titre créé dans le fichier affichage_settings.xml
-        map.put("titre", "À propos");
+        map.put("titre", "Comment jouer ?");
         //on insère un élément description que l'on récupérera dans le textView description créé dans le fichier affichage_settings.xml
-        map.put("description", "Découvrez l'équipe de Laser Car !");
+        map.put("description", "Assimilez les règles du jeu Laser Car");
         //on insère la référence à l'image (convertit en String car normalement c'est un int) que l'on récupérera dans l'imageView créé dans le fichier affichageitem.xml
-        map.put("img", String.valueOf(R.drawable.ic_launcher));
+        map.put("img", String.valueOf(R.drawable.ic_settings_howtoplay));
         //enfin on ajoute cette hashMap dans la arrayList
         listItem.add(map);
 
+
+        /* ================================================================================ */
+        /* =================================== A PROPOS =================================== */
+        /* ================================================================================ */
         //On refait la manip plusieurs fois avec des données différentes pour former les items de notre ListView
         map = new HashMap<String, String>();
+        map.put("titre", "À propos");
+        map.put("description", "Découvrez l'équipe de Laser Car");
+        map.put("img", String.valueOf(R.drawable.ic_settings_info));
+        listItem.add(map);
+
+        /* ================================================================================ */
+        /* =============================== PARAMETRES WIFI ================================ */
+        /* ================================================================================ */
+        map = new HashMap<String, String>();
         map.put("titre", "Paramètres WIFI");
-        map.put("description", "Modifiez les paramètres WIFI du smartphone");
-        map.put("img", String.valueOf(R.drawable.ic_launcher));
+        map.put("description", "Connectez-vous au WIFI Cyclope");
+        map.put("img", String.valueOf(R.drawable.ic_settings_wifi));
         listItem.add(map);
 
 
@@ -69,8 +85,19 @@ public class SettingsActivity extends ActionBarActivity
             @SuppressWarnings("unchecked")
             public void onItemClick(AdapterView<?> a, View v, int position, long id)
             {
-                // Apparition d'une boite de dialogue pour A propos
+                /* ================================================================================ */
+                /* ============================ LISTENER COMMENT JOUER ============================ */
+                /* ================================================================================ */
                 if(position == 0)
+                {
+                    Intent intent = new Intent(SettingsActivity.this, HowToPlayActivity.class);
+                    startActivity(intent);
+                }
+
+                /* ================================================================================ */
+                /* ============================ LISTENER A PROPOS ============================ */
+                /* ================================================================================ */
+                if(position == 1)
                 {
                     //on récupère la HashMap contenant les infos de notre item (titre, description, img)
                     HashMap<String, String> map = (HashMap<String, String>) maListViewPerso.getItemAtPosition(position);
@@ -86,13 +113,13 @@ public class SettingsActivity extends ActionBarActivity
                     adb.show();
                 }
 
-                // On renvoie vers la page Settings du smartphone
-                if(position == 1)
+                /* ================================================================================ */
+                /* =========================== LISTENER PARAMETRES WIFI =========================== */
+                /* ================================================================================ */
+                if(position == 2)
                 {
                     startActivityForResult(new Intent(android.provider.Settings.ACTION_WIFI_SETTINGS), 0);
                 }
-
-
             }
         });
 

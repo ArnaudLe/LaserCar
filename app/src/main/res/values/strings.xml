@@ -8,12 +8,11 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_play">PlayActivity</string>
     <string name="title_activity_settings">Paramètres</string>
-
+    <string name="title_activity_how_to_play">Comment jouer ?</string>
 
     <!-- ======================================== -->
     <!-- ============= HOMEACTIVITY ============= -->
     <!-- ======================================== -->
-    <string name="footer">Laser Car Project - Parrot Awards &amp; ESIEE Paris - Version 0.6</string>
-
+    <string name="footer">Laser Car Project - Parrot Awards &amp; ESIEE Paris - Version 0.7</string>
 
 </resources>
