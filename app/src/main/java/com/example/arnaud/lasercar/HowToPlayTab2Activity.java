@@ -5,13 +5,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-
-public class AboutActivity extends ActionBarActivity
+public class HowToPlayTab2Activity extends ActionBarActivity
 {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about);
+        setContentView(R.layout.activity_how_to_play_tab2);
+        getSupportActionBar().setTitle("Comment jouer ?");
     }
 }

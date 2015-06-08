@@ -57,6 +57,30 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.arnaud.lasercar.SettingsActivity" />
         </activity>
+        <activity
+            android:name=".HowToPlayTab1Activity"
+            android:label="@string/title_activity_how_to_play_tab1"
+            android:parentActivityName=".SettingsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.arnaud.lasercar.SettingsActivity" />
+        </activity>
+        <activity
+            android:name=".HowToPlayTab2Activity"
+            android:label="@string/title_activity_how_to_play_tab2"
+            android:parentActivityName=".SettingsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.arnaud.lasercar.SettingsActivity" />
+        </activity>
+        <activity
+            android:name=".HowToPlayTab3Activity"
+            android:label="@string/title_activity_how_to_play_tab3"
+            android:parentActivityName=".SettingsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.arnaud.lasercar.SettingsActivity" />
+        </activity>
     </application>
 
 </manifest>

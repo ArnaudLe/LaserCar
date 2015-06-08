@@ -8,7 +8,10 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_play">PlayActivity</string>
     <string name="title_activity_settings">Paramètres</string>
-    <string name="title_activity_how_to_play">Comment jouer ?</string>
+    <string name="title_activity_how_to_play">Comment jouer ?</string> <!-- Non utilisé -->
+    <string name="title_activity_how_to_play_tab1">Comment jouer ?</string> <!-- Non utilisé -->
+    <string name="title_activity_how_to_play_tab2">Comment jouer ?</string> <!-- Non utilisé -->
+    <string name="title_activity_how_to_play_tab3">Comment jouer ?</string> <!-- Non utilisé -->
     <string name="title_activity_about">À propos</string>
 
     <!-- ======================================== -->
@@ -17,7 +20,7 @@
     <string name="footer">Laser Car Project - Parrot Awards &amp; ESIEE Paris - Version 0.7</string>
 
     <!-- ======================================== -->
-    <!-- =========== HOWTOPLAYACTIVITY ========== -->
+    <!-- ========== HOWTOPLAYACTIVITY1 ========== -->
     <!-- ======================================== -->
     <string name="but">BUT DU JEU</string>
     <string name="but_texte1">Le but du jeu est d’avoir le plus grand nombre de points à la fin de la partie.
@@ -25,6 +28,16 @@
     Chaque joueur peut “tirer” depuis l’application durant un temps limité.</string>
     <string name="but_texte2">A la fin du temps de jeu, la partie s’arrête et le tableau des scores est affiché.
     Le terrain de jeu en intérieur sera conseillé pour permettre des tirs droits et la bonne réception des tirs.</string>
+
+    <!-- ======================================== -->
+    <!-- ========== HOWTOPLAYACTIVITY2 ========== -->
+    <!-- ======================================== -->
+    <string name="regles">RÈGLES PRINCIPALES</string>
+
+    <!-- ======================================== -->
+    <!-- ========== HOWTOPLAYACTIVITY2 ========== -->
+    <!-- ======================================== -->
+    <string name="commandes">COMMANDES</string>
 
     <!-- ======================================== -->
     <!-- ============= ABOUTACTIVITY ============ -->
@@ -37,5 +50,6 @@
     <string name="team4">- Xavier THOMAS (Management, vidéo et modélisation 3D)</string>
     <string name="team5">- Eric TRAN (Programmation Raspberry)</string>
     <string name="team6">- Alexandre WALLET (Carte électronique et chef de projet)</string>
+
 
 </resources>
