@@ -99,6 +99,7 @@ public class SettingsActivity extends ActionBarActivity
                 /* ================================================================================ */
                 if(position == 1)
                 {
+                    /*
                     //on récupère la HashMap contenant les infos de notre item (titre, description, img)
                     HashMap<String, String> map = (HashMap<String, String>) maListViewPerso.getItemAtPosition(position);
                     //on créer une boite de dialogue
@@ -111,6 +112,9 @@ public class SettingsActivity extends ActionBarActivity
                     adb.setPositiveButton("OK", null);
                     //on affiche la boite de dialogue
                     adb.show();
+                    */
+                    Intent intent = new Intent(SettingsActivity.this, AboutActivity.class);
+                    startActivity(intent);
                 }
 
                 /* ================================================================================ */
