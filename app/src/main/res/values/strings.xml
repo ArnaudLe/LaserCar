@@ -18,44 +18,49 @@
     <!-- ======================================== -->
     <!-- ============= HOMEACTIVITY ============= -->
     <!-- ======================================== -->
-    <string name="footer">Laser Car Project - Parrot Awards &amp; ESIEE Paris - Version 0.8</string>
+    <string name="home_footer">Laser Car Project - Parrot Awards &amp; ESIEE Paris - Version 0.8</string>
 
     <!-- ======================================== -->
     <!-- ========= GAMESETTINGSACTIVITY ========= -->
     <!-- ======================================== -->
-    <string name="hint_pseudo">Pseudo</string>
-    <string name="hint_player">Nombre de joueurs</string>
+    <string name="gamesettings_hint_pseudo">Entrez un pseudo</string>
+    <string name="gamesettings_player">Nombre de joueurs</string>
+    <string name="gamesettings_time">Durée de la partie</string>
+    <string name="gamesettings_5minutes">5min </string>
+    <string name="gamesettings_7minutes">7min </string>
+    <string name="gamesettings_10minutes">10min </string>
+    <string name="gamesettings_validate">Valider</string>
 
     <!-- ======================================== -->
     <!-- ========== HOWTOPLAYACTIVITY1 ========== -->
     <!-- ======================================== -->
-    <string name="but">BUT DU JEU</string>
-    <string name="but_texte1">Le but du jeu est d’avoir le plus grand nombre de points à la fin de la partie.
+    <string name="howtoplay1_titre">BUT DU JEU</string>
+    <string name="howtoplay1_but_texte1">Le but du jeu est d’avoir le plus grand nombre de points à la fin de la partie.
     Chaque joueur perd un point lorsqu’il reçoit un tir laser provenant d’un de ses adversaires (autokill et tirs multiples sur la même cible non traités) et gagne deux points lorsqu’il touche un adversaire.
     Chaque joueur peut “tirer” depuis l’application durant un temps limité.</string>
-    <string name="but_texte2">A la fin du temps de jeu, la partie s’arrête et le tableau des scores est affiché.
+    <string name="howtoplay1_but_texte2">A la fin du temps de jeu, la partie s’arrête et le tableau des scores est affiché.
     Le terrain de jeu en intérieur sera conseillé pour permettre des tirs droits et la bonne réception des tirs.</string>
 
     <!-- ======================================== -->
     <!-- ========== HOWTOPLAYACTIVITY2 ========== -->
     <!-- ======================================== -->
-    <string name="regles">RÈGLES PRINCIPALES</string>
+    <string name="howtoplay2_titre">RÈGLES PRINCIPALES</string>
 
     <!-- ======================================== -->
-    <!-- ========== HOWTOPLAYACTIVITY2 ========== -->
+    <!-- ========== HOWTOPLAYACTIVITY3 ========== -->
     <!-- ======================================== -->
-    <string name="commandes">COMMANDES</string>
+    <string name="howtoplay3_titre">COMMANDES</string>
 
     <!-- ======================================== -->
     <!-- ============= ABOUTACTIVITY ============ -->
     <!-- ======================================== -->
-    <string name="equipe">L\'ÉQUIPE LASER CAR</string>
-    <string name="team0">Notre équipe est composée de six personnes :</string>
-    <string name="team1">- Arnaud LE (Développeur Android)</string>
-    <string name="team2">- Pradhiban PHILLIX-ANTON (Transmission de données et programmation Raspberry)</string>
-    <string name="team3">- Bertrand RAYMAND (Carte électronique)</string>
-    <string name="team4">- Xavier THOMAS (Management, vidéo et modélisation 3D)</string>
-    <string name="team5">- Eric TRAN (Programmation Raspberry)</string>
-    <string name="team6">- Alexandre WALLET (Carte électronique et chef de projet)</string>
+    <string name="about_titre">L\'ÉQUIPE LASER CAR</string>
+    <string name="about_team0">Notre équipe est composée de six personnes :</string>
+    <string name="about_team1">- Arnaud LE (Développeur Android)</string>
+    <string name="about_team2">- Pradhiban PHILLIX-ANTON (Transmission de données et programmation Raspberry)</string>
+    <string name="about_team3">- Bertrand RAYMAND (Carte électronique)</string>
+    <string name="about_team4">- Xavier THOMAS (Management, vidéo et modélisation 3D)</string>
+    <string name="about_team5">- Eric TRAN (Programmation Raspberry)</string>
+    <string name="about_team6">- Alexandre WALLET (Carte électronique et chef de projet)</string>
 
 </resources>

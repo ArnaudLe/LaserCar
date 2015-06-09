@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/but"
+            android:text="@string/howtoplay1_titre"
             android:id="@+id/textView"
             android:textColor="@color/red"
             android:textStyle="bold"
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/but_texte1"
+            android:text="@string/howtoplay1_but_texte1"
             android:id="@+id/textView2"
             android:paddingBottom="5dp" />
 
@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/but_texte2"
+            android:text="@string/howtoplay1_but_texte2"
             android:id="@+id/textView3"
             android:paddingBottom="5dp" />
 

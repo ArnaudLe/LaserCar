@@ -12,6 +12,7 @@
         android:icon="@drawable/ic_lasercar"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
         <activity
             android:name=".HomeActivity"
             android:label="@string/app_name" >
@@ -20,10 +21,19 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-            <activity android:name=".PlayActivity" >
-            </activity>
         </activity>
+
+
+        <activity
+            android:name=".GameSettingsActivity"
+            android:label="@string/title_activity_game_settings"
+            android:parentActivityName=".HomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.arnaud.lasercar.HomeActivity" />
+        </activity>
+
+
         <activity
             android:name=".PlayActivity"
             android:label="@string/title_activity_play"
@@ -33,6 +43,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.arnaud.lasercar.GameSettingsActivity" />
         </activity>
+
+
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
@@ -41,6 +53,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.arnaud.lasercar.HomeActivity" />
         </activity>
+
+
         <activity
             android:name=".HowToPlayActivity"
             android:label="@string/title_activity_how_to_play"
@@ -49,14 +63,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.arnaud.lasercar.SettingsActivity" />
         </activity>
-        <activity
-            android:name=".AboutActivity"
-            android:label="@string/title_activity_about"
-            android:parentActivityName=".SettingsActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.arnaud.lasercar.SettingsActivity" />
-        </activity>
+
+
         <activity
             android:name=".HowToPlayTab1Activity"
             android:label="@string/title_activity_how_to_play_tab1"
@@ -65,6 +73,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.arnaud.lasercar.SettingsActivity" />
         </activity>
+
+
         <activity
             android:name=".HowToPlayTab2Activity"
             android:label="@string/title_activity_how_to_play_tab2"
@@ -73,6 +83,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.arnaud.lasercar.SettingsActivity" />
         </activity>
+
+
         <activity
             android:name=".HowToPlayTab3Activity"
             android:label="@string/title_activity_how_to_play_tab3"
@@ -81,14 +93,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.arnaud.lasercar.SettingsActivity" />
         </activity>
+
+
         <activity
-            android:name=".GameSettingsActivity"
-            android:label="@string/title_activity_game_settings"
-            android:parentActivityName=".HomeActivity" >
+            android:name=".AboutActivity"
+            android:label="@string/title_activity_about"
+            android:parentActivityName=".SettingsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.arnaud.lasercar.HomeActivity" />
+                android:value="com.example.arnaud.lasercar.SettingsActivity" />
         </activity>
+
+
     </application>
 
 </manifest>

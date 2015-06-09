@@ -1,7 +1,9 @@
 package com.example.arnaud.lasercar;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,16 +12,24 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 
 
 public class GameSettingsActivity extends ActionBarActivity
 {
-    private EditText pseudo;
+    private NumberPicker np;
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_settings);
+
+        NumberPicker np = (NumberPicker) findViewById(R.id.np_player);
+        np.setMaxValue(6);
+        np.setMinValue(2);
+
+        np.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS); // désactive clavier pour le NumberPicker
     }
 
     // Masque le clavier après un clic ailleurs que l'EditText
