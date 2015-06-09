@@ -14,4 +14,7 @@ public class HowToPlayTab2Activity extends ActionBarActivity
         setContentView(R.layout.activity_how_to_play_tab2);
         getSupportActionBar().setTitle("Comment jouer ?");
     }
+
+    @Override
+    public void onBackPressed() {this.getParent().onBackPressed();}
 }
