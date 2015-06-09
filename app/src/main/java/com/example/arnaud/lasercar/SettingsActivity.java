@@ -1,10 +1,8 @@
 package com.example.arnaud.lasercar;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -92,6 +90,7 @@ public class SettingsActivity extends ActionBarActivity
                 {
                     Intent intent = new Intent(SettingsActivity.this, HowToPlayActivity.class);
                     startActivity(intent);
+                    overridePendingTransition(R.anim.right_to_in, R.anim.in_to_left);
                 }
 
                 /* ================================================================================ */
@@ -115,6 +114,9 @@ public class SettingsActivity extends ActionBarActivity
                     */
                     Intent intent = new Intent(SettingsActivity.this, AboutActivity.class);
                     startActivity(intent);
+
+                    // public void overridePendingTransition (int enterAnim, int exitAnim)
+                    overridePendingTransition(R.anim.right_to_in, R.anim.in_to_left);
                 }
 
                 /* ================================================================================ */
@@ -127,5 +129,29 @@ public class SettingsActivity extends ActionBarActivity
             }
         });
 
+    } // fin onCreate
+
+    /* ================================================================================ */
+    /* =========================== ANIMATION BOUTON RETOUR ============================ */
+    /* ================================================================================ */
+    // Retour du smartphone
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        // public void overridePendingTransition (int enterAnim, int exitAnim)
+        overridePendingTransition(R.anim.up_to_in, R.anim.in_to_down);
+    }
+    // Retour de l'ActionBar
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        if (item.getItemId() == android.R.id.home)
+        {
+            finish();
+            overridePendingTransition(R.anim.up_to_in, R.anim.in_to_down);
+            return true;
+        }
+        return false;
     }
 }

@@ -1,6 +1,8 @@
 package com.example.arnaud.lasercar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.hardware.Sensor;
@@ -404,5 +406,25 @@ public class PlayActivity extends Activity implements SensorEventListener
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    /* ================================================================================ */
+    /* ========================== GESTION BOUTON RETOUR =============================== */
+    /* ================================================================================ */
+    @Override
+    public void onBackPressed()
+    {
+        new AlertDialog.Builder(this)
+                .setTitle("Veuillez confirmer")
+                .setMessage("Voulez-vous vraiment quitter cette page ?")
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface arg0, int arg1)
+                    {
+                        PlayActivity.super.onBackPressed();
+                    }
+                }).create().show();
     }
 }

@@ -27,6 +27,7 @@ public class HomeActivity extends Activity
     {
         Intent intent = new Intent(this, GameSettingsActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.right_to_in, R.anim.in_to_left);
     }
 
     /* Appelee quand l'utilisateur appuie sur le bouton Options */
@@ -34,5 +35,6 @@ public class HomeActivity extends Activity
     {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.down_to_in, R.anim.in_to_up);
     }
 }

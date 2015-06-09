@@ -16,4 +16,6 @@ public class HowToPlayTab1Activity extends ActionBarActivity
         getSupportActionBar().setTitle("Comment jouer ?");
     }
 
+    @Override
+    public void onBackPressed() {this.getParent().onBackPressed();}
 }
