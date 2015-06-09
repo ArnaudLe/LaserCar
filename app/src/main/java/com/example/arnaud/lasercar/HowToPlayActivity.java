@@ -37,7 +37,8 @@ public class HowToPlayActivity extends TabActivity
         tabHost.addTab(tabHost.newTabSpec(tag).setIndicator(createTabView(tabHost.getContext(), name)).setContent(intent));
     }
 
-    private static View createTabView(final Context context, final String text) {
+    private static View createTabView(final Context context, final String text)
+    {
         View view = LayoutInflater.from(context).inflate(R.layout.tab_item, null);
         TextView tv = (TextView) view.findViewById(R.id.tabsText);
         tv.setText(text);

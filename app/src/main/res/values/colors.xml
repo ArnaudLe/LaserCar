@@ -3,5 +3,6 @@
     <color name="transparent">#00000000</color>
     <color name="white">#ffffffff</color>
     <color name="black">#ff000000</color>
+    <color name="gray">#ff363636</color>
     <color name="red">#a43939</color>
 </resources>

@@ -6,6 +6,7 @@
     <!-- ======================================== -->
     <string name="app_name">Laser Car</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_game_settings">Paramètres de la partie</string>
     <string name="title_activity_play">PlayActivity</string>
     <string name="title_activity_settings">Paramètres</string>
     <string name="title_activity_how_to_play">Comment jouer ?</string> <!-- Non utilisé -->
@@ -17,7 +18,13 @@
     <!-- ======================================== -->
     <!-- ============= HOMEACTIVITY ============= -->
     <!-- ======================================== -->
-    <string name="footer">Laser Car Project - Parrot Awards &amp; ESIEE Paris - Version 0.7</string>
+    <string name="footer">Laser Car Project - Parrot Awards &amp; ESIEE Paris - Version 0.8</string>
+
+    <!-- ======================================== -->
+    <!-- ========= GAMESETTINGSACTIVITY ========= -->
+    <!-- ======================================== -->
+    <string name="hint_pseudo">Pseudo</string>
+    <string name="hint_player">Nombre de joueurs</string>
 
     <!-- ======================================== -->
     <!-- ========== HOWTOPLAYACTIVITY1 ========== -->
@@ -50,6 +57,5 @@
     <string name="team4">- Xavier THOMAS (Management, vidéo et modélisation 3D)</string>
     <string name="team5">- Eric TRAN (Programmation Raspberry)</string>
     <string name="team6">- Alexandre WALLET (Carte électronique et chef de projet)</string>
-
 
 </resources>

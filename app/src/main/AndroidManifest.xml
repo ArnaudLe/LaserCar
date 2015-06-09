@@ -27,11 +27,11 @@
         <activity
             android:name=".PlayActivity"
             android:label="@string/title_activity_play"
-            android:parentActivityName=".HomeActivity"
+            android:parentActivityName=".GameSettingsActivity"
             android:screenOrientation="landscape" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.arnaud.lasercar.HomeActivity" />
+                android:value="com.example.arnaud.lasercar.GameSettingsActivity" />
         </activity>
         <activity
             android:name=".SettingsActivity"
@@ -80,6 +80,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.arnaud.lasercar.SettingsActivity" />
+        </activity>
+        <activity
+            android:name=".GameSettingsActivity"
+            android:label="@string/title_activity_game_settings"
+            android:parentActivityName=".HomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.arnaud.lasercar.HomeActivity" />
         </activity>
     </application>
 
