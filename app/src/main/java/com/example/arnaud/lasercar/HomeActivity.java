@@ -25,7 +25,7 @@ public class HomeActivity extends Activity
     /* Appelee quand l'utilisateur appuie sur le bouton Jouer ! */
     public void playMessage(View view)
     {
-        Intent intent = new Intent(this, PlayActivity.class);
+        Intent intent = new Intent(this, GameSettingsActivity.class);
         startActivity(intent);
     }
 
