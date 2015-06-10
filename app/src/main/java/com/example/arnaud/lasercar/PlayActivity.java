@@ -163,6 +163,21 @@ public class PlayActivity extends Activity implements SensorEventListener
         tvScore = (TextView) findViewById(R.id.tv_score); tvScore.setTypeface(abolition);
         tvInfo = (TextView) findViewById(R.id.tv_info); tvInfo.setTypeface(abolition);
 
+
+        /* ================================================================================ */
+        /* ================= RECEPTION DONNEES DE L'ACTIVITE GAMESETTINGS ================= */
+        /* ================================================================================ */
+        Intent gameSettingsIntent = getIntent();
+        // Réception du pseudo
+        String data_pseudo = gameSettingsIntent.getStringExtra("message_pseudo"); // public String getStringExtra (String name)
+        tvPseudo.setText(data_pseudo);
+        // Réception du nombre de joueurs
+        String data_player = gameSettingsIntent.getStringExtra("message_player");
+        //tvTest.setText(data_player);
+        // Réception du nombre de joueurs
+        String data_time = gameSettingsIntent.getStringExtra("message_time");
+        //tvTest.setText(data_time);
+
         /* ================================================================================ */
         /* =============== CONNEXION RASPBERRY ET ENVOIE DE DONNEES VITESSE =============== */
         /* ================================================================================ */
@@ -407,7 +422,6 @@ public class PlayActivity extends Activity implements SensorEventListener
             e.printStackTrace();
         }
     }
-
 
     /* ================================================================================ */
     /* ========================== GESTION BOUTON RETOUR =============================== */

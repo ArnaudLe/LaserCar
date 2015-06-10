@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 
 public class GameSettingsActivity extends ActionBarActivity
@@ -41,10 +43,25 @@ public class GameSettingsActivity extends ActionBarActivity
         return true;
     }
 
-    /* Appelee quand l'utilisateur appuie sur le bouton Valider*/
+    /* Appelee quand l'utilisateur appuie sur le bouton Valider */
     public void sendData(View view)
     {
         Intent intent = new Intent(this, PlayActivity.class);
+
+        // Récupère le pseudo de l'EditText et l'ajoute au Intent a envoyer
+        EditText et_pseudo = (EditText) findViewById(R.id.et_pseudo);
+        String data_pseudo = et_pseudo.getText().toString();
+        intent.putExtra("message_pseudo", data_pseudo); // putExtra(String name, String value)
+        // Récupère le nombre de joueurs du NumberPicker et l'ajoute au Intent a envoyer
+        NumberPicker np = (NumberPicker) findViewById(R.id.np_player);
+        String data_player = "" + np.getValue();
+        intent.putExtra("message_player", data_player);
+        // Récupère le temps de la partie du RadioGroup et l'ajoute au Intent a envoyer
+        RadioGroup rg_time = (RadioGroup)findViewById(R.id.rg_time);
+        int buttonCheckedId = rg_time.getCheckedRadioButtonId();
+        String data_time = ((RadioButton) findViewById(buttonCheckedId)).getText().toString();
+        intent.putExtra("message_time", data_time);
+
         startActivity(intent);
     }
 
