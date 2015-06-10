@@ -37,6 +37,10 @@ public class PlayActivity extends Activity implements SensorEventListener
     /* ================================================================================ */
     /* =========================== DECLARATION ATTRIBUTS ============================== */
     /* ================================================================================ */
+    // Attributs réception de données GameSettings
+    String data_pseudo;
+    String data_player;
+    String data_time;
     // Attributs accéléromètre
     private Sensor accelerometer;
     private SensorManager sm;
@@ -154,14 +158,32 @@ public class PlayActivity extends Activity implements SensorEventListener
         ibAvancer = (ImageButton) findViewById(R.id.ib_avancer);
         ibReculer = (ImageButton) findViewById(R.id.ib_reculer);
         // laser
-        ibLaser = (ImageButton) findViewById(R.id.ib_laser);
-        // envoi de données
         tvLaser = (TextView) findViewById(R.id.tv_laser);
+        ibLaser = (ImageButton) findViewById(R.id.ib_laser);
         // autre
         tvTest = (TextView) findViewById(R.id.tv_test);
         tvPseudo = (TextView) findViewById(R.id.tv_pseudo); tvPseudo.setTypeface(abolition);
         tvScore = (TextView) findViewById(R.id.tv_score); tvScore.setTypeface(abolition);
         tvInfo = (TextView) findViewById(R.id.tv_info); tvInfo.setTypeface(abolition);
+
+
+        /* ================================================================================ */
+        /* ================= RECEPTION DONNEES DE L'ACTIVITE GAMESETTINGS ================= */
+        /* ================================================================================ */
+        Intent gameSettingsIntent = getIntent();
+        // Réception du pseudo
+        data_pseudo = gameSettingsIntent.getStringExtra("message_pseudo"); // public String getStringExtra (String name)
+        tvPseudo.setText(data_pseudo);
+        // Réception du nombre de joueurs
+        data_player = gameSettingsIntent.getStringExtra("message_player");
+        //tvTest.setText(data_player);
+        // Réception du nombre de joueurs
+        data_time = gameSettingsIntent.getStringExtra("message_time");
+        //tvTest.setText(data_time);
+
+        // Configuration Profile + Partie (Envoi des données vers RPI)
+        setFormProfile();
+        setFormGame();
 
         /* ================================================================================ */
         /* =============== CONNEXION RASPBERRY ET ENVOIE DE DONNEES VITESSE =============== */
@@ -325,7 +347,7 @@ public class PlayActivity extends Activity implements SensorEventListener
     }
 
     /* ================================================================================ */
-    /* =================== MISE EN FORME DES DONNEES (VITESSE + LASER) ================ */
+    /* ============================ MISE EN FORME DES DONNEES ========================= */
     /* ================================================================================ */
     // Obtenir adresse IP du smartphone
     public String getAdresseIP()
@@ -356,6 +378,18 @@ public class PlayActivity extends Activity implements SensorEventListener
 
         //tvTest.setText(data);
         return data;
+    }
+
+    // Met sous la bonne forme pour envoi de données pour l'identification
+    public String setFormProfile()
+    {
+        return getAdresseIP() + "&setprofile&[name&" + data_pseudo + "&type&android&role&true_master&feedback&Yes]";
+    }
+
+    // Met sous la bonne forme pour envoi de données pour la configuration d'une partie
+    public String setFormGame()
+    {
+        return getAdresseIP() + "&setgame&[n_player&" + data_player + "&time&" + data_time + "]";
     }
 
     /* ================================================================================ */
@@ -408,6 +442,33 @@ public class PlayActivity extends Activity implements SensorEventListener
         }
     }
 
+    /* ================================================================================ */
+    /* =================== ENVOI DE DONNEES SETPROFILE + SETGAME ====================== */
+    /* ================================================================================ */
+    public void setProfile()
+    {
+        try {
+            String data = setFormProfile();
+            PrintWriter out = new PrintWriter(new BufferedWriter(
+                    new OutputStreamWriter(mySocket.getOutputStream())),
+                    true);
+            out.println(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void setGame()
+    {
+        try {
+            String data = setFormGame();
+            PrintWriter out = new PrintWriter(new BufferedWriter(
+                    new OutputStreamWriter(mySocket.getOutputStream())),
+                    true);
+            out.println(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /* ================================================================================ */
     /* ========================== GESTION BOUTON RETOUR =============================== */

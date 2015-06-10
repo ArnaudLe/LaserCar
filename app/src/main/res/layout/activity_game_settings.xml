@@ -44,14 +44,14 @@
         android:text="@string/gamesettings_time"
         android:id="@+id/tv_time"
         android:textColor="@color/black"
-        android:layout_above="@+id/rg_players"
+        android:layout_above="@+id/rg_time"
         android:layout_centerHorizontal="true" />
 
     <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:id="@+id/rg_players"
+        android:id="@+id/rg_time"
         android:checkedButton="@+id/rb_5minutes"
         android:layout_above="@+id/btn_validate"
         android:layout_marginBottom="18dp"
