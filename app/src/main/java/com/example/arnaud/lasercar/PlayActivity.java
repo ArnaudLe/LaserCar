@@ -1,4 +1,5 @@
 package com.example.arnaud.lasercar;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -11,8 +12,10 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.PopupMenu;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -488,4 +491,6 @@ public class PlayActivity extends Activity implements SensorEventListener
                     }
                 }).create().show();
     }
+
 }
+
