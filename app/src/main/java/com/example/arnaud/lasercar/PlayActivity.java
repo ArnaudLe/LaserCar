@@ -3,6 +3,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -12,9 +13,15 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.format.Formatter;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.PopupWindow;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.os.Handler;
 import java.io.BufferedWriter;
@@ -25,6 +32,7 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import android.view.ViewGroup.LayoutParams;
 
 
 public class PlayActivity extends Activity implements SensorEventListener
@@ -56,6 +64,8 @@ public class PlayActivity extends Activity implements SensorEventListener
     private ImageButton ibLaser;
     private boolean lAutoIncrement = false; // indique laser état Tirer ou non
     private int timeLaser;
+    // Attributs start
+    private ImageButton ibStart;
     // Attributs mise en forme des données
     private TextView tvLaser;
     // Attribus connexion RPI et envoi de données
@@ -151,6 +161,8 @@ public class PlayActivity extends Activity implements SensorEventListener
         // laser
         tvLaser = (TextView) findViewById(R.id.tv_laser);
         ibLaser = (ImageButton) findViewById(R.id.ib_laser);
+        // start
+        ibStart = (ImageButton) findViewById(R.id.ib_start);
         // autre
         tvTest = (TextView) findViewById(R.id.tv_test);
         tvPseudo = (TextView) findViewById(R.id.tv_pseudo); tvPseudo.setTypeface(abolition);
@@ -269,6 +281,39 @@ public class PlayActivity extends Activity implements SensorEventListener
                             }
                         }
                 );
+
+        /* ================================================================================ */
+        /* ======================= GESTION BOUTON START POPUP WINDOW ====================== */
+        /* ================================================================================ */
+        ibStart.setOnClickListener
+        (
+            new ImageButton.OnClickListener()
+            {
+                @Override
+                public void onClick(View arg0)
+                {
+                    LayoutInflater layoutInflater = (LayoutInflater)getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+                    View popupView = layoutInflater.inflate(R.layout.popup_window, null);
+                    final PopupWindow popupWindow = new PopupWindow(popupView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+
+                    Button btnDismiss = (Button)popupView.findViewById(R.id.btn_dismiss);
+
+                    btnDismiss.setOnClickListener
+                    (
+                        new Button.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(View v)
+                            {
+                                popupWindow.dismiss();
+                            }
+                        }
+                    );
+                    popupWindow.setAnimationStyle(R.style.AnimationPopup);
+                    popupWindow.showAtLocation(ibStart, Gravity.CENTER, 0, 0);
+                }
+            }
+        );
     } // Fin onCreate : fonction principale
 
     // Redéfinition nécessaire pour pouvoir utiliser l'accéléromètre
@@ -468,7 +513,7 @@ public class PlayActivity extends Activity implements SensorEventListener
     {
         new AlertDialog.Builder(this)
                 .setTitle("Veuillez confirmer")
-                .setMessage("Voulez-vous vraiment quitter cette page ?")
+                .setMessage("Voulez-vous vraiment quitter le jeu ?")
                 .setNegativeButton(android.R.string.no, null)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener()
                 {
@@ -479,5 +524,5 @@ public class PlayActivity extends Activity implements SensorEventListener
                 }).create().show();
     }
 
-}
+} // Fin PlayActivity
 

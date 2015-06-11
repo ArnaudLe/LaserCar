@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/howtoplay1_titre"
+            android:text="@string/howtoplay1_title"
             android:id="@+id/textView"
             android:textColor="@color/red"
             android:textStyle="bold"

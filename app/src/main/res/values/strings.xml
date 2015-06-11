@@ -32,9 +32,30 @@
     <string name="gamesettings_validate">Valider</string>
 
     <!-- ======================================== -->
+    <!-- ====== PLAYACTIVITY (POPUP WINDOW) ===== -->
+    <!-- ======================================== -->
+    <string name="play_title">LASER CAR - MENU START</string>
+    <string name="play_quit">Quitter la partie</string>
+    <string name="play_dismiss">Annuler</string>
+
+    <string name="play_table_title1">JOUEUR</string>
+    <string name="play_table_title2">A TOUCHÉ</string>
+    <string name="play_table_title3">A ÉTÉ TOUCHÉ</string>
+    <string name="play_table_title4">SCORE</string>
+    <string name="play_table_row1_col1">Joueur1</string>
+    <string name="play_table_row1_col2">0</string>
+    <string name="play_table_row1_col3">0</string>
+    <string name="play_table_row1_col4">0</string>
+    <string name="play_table_row2_col1">Joueur2</string>
+    <string name="play_table_row2_col2">0</string>
+    <string name="play_table_row2_col3">0</string>
+    <string name="play_table_row2_col4">0</string>
+
+
+    <!-- ======================================== -->
     <!-- ========== HOWTOPLAYACTIVITY1 ========== -->
     <!-- ======================================== -->
-    <string name="howtoplay1_titre">BUT DU JEU</string>
+    <string name="howtoplay1_title">BUT DU JEU</string>
     <string name="howtoplay1_but_texte1">Le but du jeu est d’avoir le plus grand nombre de points à la fin de la partie.
     Chaque joueur perd un point lorsqu’il reçoit un tir laser provenant d’un de ses adversaires (autokill et tirs multiples sur la même cible non traités) et gagne deux points lorsqu’il touche un adversaire.
     Chaque joueur peut “tirer” depuis l’application durant un temps limité.</string>
@@ -44,17 +65,17 @@
     <!-- ======================================== -->
     <!-- ========== HOWTOPLAYACTIVITY2 ========== -->
     <!-- ======================================== -->
-    <string name="howtoplay2_titre">RÈGLES PRINCIPALES</string>
+    <string name="howtoplay2_title">RÈGLES PRINCIPALES</string>
 
     <!-- ======================================== -->
     <!-- ========== HOWTOPLAYACTIVITY3 ========== -->
     <!-- ======================================== -->
-    <string name="howtoplay3_titre">COMMANDES</string>
+    <string name="howtoplay3_title">COMMANDES</string>
 
     <!-- ======================================== -->
     <!-- ============= ABOUTACTIVITY ============ -->
     <!-- ======================================== -->
-    <string name="about_titre">L\'ÉQUIPE LASER CAR</string>
+    <string name="about_title">L\'ÉQUIPE LASER CAR</string>
     <string name="about_team0">Notre équipe est composée de six personnes :</string>
     <string name="about_team1">- Arnaud LE (Développeur Android)</string>
     <string name="about_team2">- Pradhiban PHILLIX-ANTON (Transmission de données et programmation Raspberry)</string>
