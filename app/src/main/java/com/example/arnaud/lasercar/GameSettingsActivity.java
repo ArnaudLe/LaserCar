@@ -28,7 +28,7 @@ public class GameSettingsActivity extends ActionBarActivity
         setContentView(R.layout.activity_game_settings);
 
         NumberPicker np = (NumberPicker) findViewById(R.id.np_player);
-        np.setMaxValue(6);
+        np.setMaxValue(8);
         np.setMinValue(2);
 
         np.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS); // désactive clavier pour le NumberPicker

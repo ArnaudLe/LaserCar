@@ -296,6 +296,7 @@ public class PlayActivity extends Activity implements SensorEventListener
                     View popupView = layoutInflater.inflate(R.layout.popup_window, null);
                     final PopupWindow popupWindow = new PopupWindow(popupView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
+                    initTable(popupView, data_player);
                     Button btnDismiss = (Button)popupView.findViewById(R.id.btn_dismiss);
 
                     btnDismiss.setOnClickListener
@@ -502,6 +503,77 @@ public class PlayActivity extends Activity implements SensorEventListener
             out.println(data);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    /* ================================================================================ */
+    /* ====================== GESTION DU TABLEAU DES SCORES =========================== */
+    /* ================================================================================ */
+    public void initTable(View popupView, String nb_player)
+    {
+        TableLayout tlTable = (TableLayout) popupView.findViewById(R.id.tl_table);
+
+        // Remplissage LIGNE 1
+        TableRow tr_table_row1 = new TableRow(this);
+        // Titre 1
+        TextView tv_table_row1_col1 = new TextView(this);
+        tv_table_row1_col1.setText("JOUEUR");
+        tv_table_row1_col1.setTypeface(Typeface.DEFAULT_BOLD);
+        tv_table_row1_col1.setPadding(15, 5, 15, 5);
+        tv_table_row1_col1.setTextColor(Color.BLACK);
+        tr_table_row1.addView(tv_table_row1_col1);
+        // Titre 2
+        TextView tv_table_row1_col2 = new TextView(this);
+        tv_table_row1_col2.setText("A TOUCHÉ");
+        tv_table_row1_col2.setTypeface(Typeface.DEFAULT_BOLD);
+        tv_table_row1_col2.setPadding(15, 5, 15, 5);
+        tv_table_row1_col2.setTextColor(Color.BLACK);
+        tr_table_row1.addView(tv_table_row1_col2);
+        // Titre 3
+        TextView tv_table_row1_col3 = new TextView(this);
+        tv_table_row1_col3.setText("A ÉTÉ TOUCHÉ");
+        tv_table_row1_col3.setTypeface(Typeface.DEFAULT_BOLD);
+        tv_table_row1_col3.setPadding(15, 5, 15, 5);
+        tv_table_row1_col3.setTextColor(Color.BLACK);
+        tr_table_row1.addView(tv_table_row1_col3);
+        // Titre 4
+        TextView tv_table_row1_col4 = new TextView(this);
+        tv_table_row1_col4.setText("SCORE");
+        tv_table_row1_col4.setTypeface(Typeface.DEFAULT_BOLD);
+        tv_table_row1_col4.setPadding(15, 5, 15, 5);
+        tv_table_row1_col4.setTextColor(Color.BLACK);
+        tr_table_row1.addView(tv_table_row1_col4);
+        tlTable.addView(tr_table_row1);
+
+        // Remplissage des autres lignes
+        for (int i = 1; i < Integer.parseInt(nb_player) + 1; i++) // boucle sur le nombre de joueurs de la partie
+        {
+            // Colonne 1
+            TableRow tr_row = new TableRow(this);
+            TextView tv_col1 = new TextView(this);
+            tv_col1.setText("Joueur " + i);
+            tv_col1.setTextColor(Color.BLACK);
+            tv_col1.setGravity(Gravity.CENTER);
+            tr_row.addView(tv_col1);
+            // Colonne 2
+            TextView tv_col2 = new TextView(this);
+            tv_col2.setText("0");
+            tv_col2.setTextColor(Color.BLACK);
+            tv_col2.setGravity(Gravity.CENTER);
+            tr_row.addView(tv_col2);
+            // Colonne 3
+            TextView tv_col3 = new TextView(this);
+            tv_col3.setText("0");
+            tv_col3.setTextColor(Color.BLACK);
+            tv_col3.setGravity(Gravity.CENTER);
+            tr_row.addView(tv_col3);
+            // Colonne 4
+            TextView tv_col4 = new TextView(this);
+            tv_col4.setText("0");
+            tv_col4.setTextColor(Color.BLACK);
+            tv_col4.setGravity(Gravity.CENTER);
+            tr_row.addView(tv_col4);
+            tlTable.addView(tr_row);
         }
     }
 

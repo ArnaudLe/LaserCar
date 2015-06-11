@@ -15,7 +15,7 @@
         android:layout_weight="1"
         android:textColor="@color/red"
         android:textSize="25sp"
-        android:paddingTop="35dp"
+        android:paddingTop="25dp"
         android:textStyle="bold" />
 
     <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -24,85 +24,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_gravity="center">
-
-        <TableRow android:layout_height="wrap_content"
-            android:id="@+id/tr_table_row1">
-            <TextView
-                android:id="@+id/tv_table_title1"
-                android:text="@string/play_table_title1"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:layout_width="wrap_content"
-                android:padding="15dp" />
-            <TextView
-                android:id="@+id/tv_table_title2"
-                android:text="@string/play_table_title2"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="15dp"
-                android:textStyle="bold" />
-            <TextView
-                android:id="@+id/tv_table_title3"
-                android:text="@string/play_table_title3"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="15dp"
-                android:textStyle="bold" />
-            <TextView
-                android:id="@+id/tv_table_title4"
-                android:text="@string/play_table_title4"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="15dp"
-                android:textStyle="bold" />
-        </TableRow>
-
-        <TableRow android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/tv_table_row1_col1"
-                android:text="@string/play_table_row1_col1"
-                android:layout_height="wrap_content"
-                android:gravity="center" />
-            <TextView
-                android:id="@+id/tv_table_row1_col2"
-                android:text="@string/play_table_row1_col2"
-                android:layout_height="wrap_content"
-                android:gravity="center" />
-            <TextView
-                android:id="@+id/tv_table_row1_col3"
-                android:text="@string/play_table_row1_col3"
-                android:layout_height="wrap_content"
-                android:gravity="center" />
-            <TextView
-                android:id="@+id/tv_table_row1_col4"
-                android:text="@string/play_table_row1_col4"
-                android:layout_height="wrap_content"
-                android:gravity="center" />
-        </TableRow>
-
-        <TableRow android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/tv_table_row2_col1"
-                android:text="@string/play_table_row2_col1"
-                android:layout_height="wrap_content"
-                android:gravity="center" />
-            <TextView
-                android:id="@+id/tv_table_row2_co2"
-                android:text="@string/play_table_row2_col2"
-                android:layout_height="wrap_content"
-                android:gravity="center" />
-            <TextView
-                android:id="@+id/tv_table_row2_col3"
-                android:text="@string/play_table_row2_col3"
-                android:layout_height="wrap_content"
-                android:gravity="center" />
-            <TextView
-                android:id="@+id/tv_table_row2_col4"
-                android:text="@string/play_table_row2_col4"
-                android:layout_height="wrap_content"
-                android:gravity="center" />
-        </TableRow>
     </TableLayout>
 
     <LinearLayout

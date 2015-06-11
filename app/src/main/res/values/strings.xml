@@ -38,19 +38,6 @@
     <string name="play_quit">Quitter la partie</string>
     <string name="play_dismiss">Annuler</string>
 
-    <string name="play_table_title1">JOUEUR</string>
-    <string name="play_table_title2">A TOUCHÉ</string>
-    <string name="play_table_title3">A ÉTÉ TOUCHÉ</string>
-    <string name="play_table_title4">SCORE</string>
-    <string name="play_table_row1_col1">Joueur1</string>
-    <string name="play_table_row1_col2">0</string>
-    <string name="play_table_row1_col3">0</string>
-    <string name="play_table_row1_col4">0</string>
-    <string name="play_table_row2_col1">Joueur2</string>
-    <string name="play_table_row2_col2">0</string>
-    <string name="play_table_row2_col3">0</string>
-    <string name="play_table_row2_col4">0</string>
-
 
     <!-- ======================================== -->
     <!-- ========== HOWTOPLAYACTIVITY1 ========== -->
