@@ -1,26 +1,29 @@
 package com.example.arnaud.lasercar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.format.Formatter;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.PopupWindow;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.os.Handler;
-
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -29,7 +32,7 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
+import android.view.ViewGroup.LayoutParams;
 
 
 public class PlayActivity extends Activity implements SensorEventListener
@@ -61,6 +64,8 @@ public class PlayActivity extends Activity implements SensorEventListener
     private ImageButton ibLaser;
     private boolean lAutoIncrement = false; // indique laser état Tirer ou non
     private int timeLaser;
+    // Attributs start
+    private ImageButton ibStart;
     // Attributs mise en forme des données
     private TextView tvLaser;
     // Attribus connexion RPI et envoi de données
@@ -127,10 +132,6 @@ public class PlayActivity extends Activity implements SensorEventListener
                     decrement("laser");
                     handlerLaser.postDelayed(new RptUpdaterLaser(), DELAY);
                 }
-                else if(timeLaser > 0 && timeLaser < 100) // Exclu le cas où timeLaser == 0
-                {
-                    handlerLaser.postDelayed(new RptUpdaterLaser(), DELAY);
-                }
             }
             sendLaser(); // envoi données laser tant que l'on reste appuyé sur le bouton laser
         }
@@ -160,12 +161,13 @@ public class PlayActivity extends Activity implements SensorEventListener
         // laser
         tvLaser = (TextView) findViewById(R.id.tv_laser);
         ibLaser = (ImageButton) findViewById(R.id.ib_laser);
+        // start
+        ibStart = (ImageButton) findViewById(R.id.ib_start);
         // autre
         tvTest = (TextView) findViewById(R.id.tv_test);
         tvPseudo = (TextView) findViewById(R.id.tv_pseudo); tvPseudo.setTypeface(abolition);
         tvScore = (TextView) findViewById(R.id.tv_score); tvScore.setTypeface(abolition);
         tvInfo = (TextView) findViewById(R.id.tv_info); tvInfo.setTypeface(abolition);
-
 
         /* ================================================================================ */
         /* ================= RECEPTION DONNEES DE L'ACTIVITE GAMESETTINGS ================= */
@@ -279,6 +281,40 @@ public class PlayActivity extends Activity implements SensorEventListener
                             }
                         }
                 );
+
+        /* ================================================================================ */
+        /* ======================= GESTION BOUTON START POPUP WINDOW ====================== */
+        /* ================================================================================ */
+        ibStart.setOnClickListener
+        (
+            new ImageButton.OnClickListener()
+            {
+                @Override
+                public void onClick(View arg0)
+                {
+                    LayoutInflater layoutInflater = (LayoutInflater)getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+                    View popupView = layoutInflater.inflate(R.layout.popup_window, null);
+                    final PopupWindow popupWindow = new PopupWindow(popupView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+
+                    initTable(popupView, data_player);
+                    Button btnDismiss = (Button)popupView.findViewById(R.id.btn_dismiss);
+
+                    btnDismiss.setOnClickListener
+                    (
+                        new Button.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(View v)
+                            {
+                                popupWindow.dismiss();
+                            }
+                        }
+                    );
+                    popupWindow.setAnimationStyle(R.style.AnimationPopup);
+                    popupWindow.showAtLocation(ibStart, Gravity.CENTER, 0, 0);
+                }
+            }
+        );
     } // Fin onCreate : fonction principale
 
     // Redéfinition nécessaire pour pouvoir utiliser l'accéléromètre
@@ -301,7 +337,7 @@ public class PlayActivity extends Activity implements SensorEventListener
         else if(s.equals("laser"))
         {
             timeLaser++;
-            tvLaser.setText("Laser : " + timeLaser + "s");
+            tvLaser.setText("Laser : " + (int) Math.floor(timeLaser*1.25) + "%"); // Mul par 1.25 pour passage échelle 0-80 à 0-100
         }
     }
     // Fonctions gestion décrémentation
@@ -315,7 +351,7 @@ public class PlayActivity extends Activity implements SensorEventListener
         else if(s.equals("laser"))
         {
             timeLaser--;
-            tvLaser.setText("Laser : " + timeLaser + "s");
+            tvLaser.setText("Laser : " + (int) Math.floor(timeLaser*1.25) + "%");
         }
     }
 
@@ -471,14 +507,85 @@ public class PlayActivity extends Activity implements SensorEventListener
     }
 
     /* ================================================================================ */
-    /* ========================== GESTION BOUTON RETOUR =============================== */
+    /* ====================== GESTION DU TABLEAU DES SCORES =========================== */
+    /* ================================================================================ */
+    public void initTable(View popupView, String nb_player)
+    {
+        TableLayout tlTable = (TableLayout) popupView.findViewById(R.id.tl_table);
+
+        // Remplissage LIGNE 1
+        TableRow tr_table_row1 = new TableRow(this);
+        // Titre 1
+        TextView tv_table_row1_col1 = new TextView(this);
+        tv_table_row1_col1.setText("JOUEUR");
+        tv_table_row1_col1.setTypeface(Typeface.DEFAULT_BOLD);
+        tv_table_row1_col1.setPadding(15, 5, 15, 5);
+        tv_table_row1_col1.setTextColor(Color.BLACK);
+        tr_table_row1.addView(tv_table_row1_col1);
+        // Titre 2
+        TextView tv_table_row1_col2 = new TextView(this);
+        tv_table_row1_col2.setText("A TOUCHÉ");
+        tv_table_row1_col2.setTypeface(Typeface.DEFAULT_BOLD);
+        tv_table_row1_col2.setPadding(15, 5, 15, 5);
+        tv_table_row1_col2.setTextColor(Color.BLACK);
+        tr_table_row1.addView(tv_table_row1_col2);
+        // Titre 3
+        TextView tv_table_row1_col3 = new TextView(this);
+        tv_table_row1_col3.setText("A ÉTÉ TOUCHÉ");
+        tv_table_row1_col3.setTypeface(Typeface.DEFAULT_BOLD);
+        tv_table_row1_col3.setPadding(15, 5, 15, 5);
+        tv_table_row1_col3.setTextColor(Color.BLACK);
+        tr_table_row1.addView(tv_table_row1_col3);
+        // Titre 4
+        TextView tv_table_row1_col4 = new TextView(this);
+        tv_table_row1_col4.setText("SCORE");
+        tv_table_row1_col4.setTypeface(Typeface.DEFAULT_BOLD);
+        tv_table_row1_col4.setPadding(15, 5, 15, 5);
+        tv_table_row1_col4.setTextColor(Color.BLACK);
+        tr_table_row1.addView(tv_table_row1_col4);
+        tlTable.addView(tr_table_row1);
+
+        // Remplissage des autres lignes
+        for (int i = 1; i < Integer.parseInt(nb_player) + 1; i++) // boucle sur le nombre de joueurs de la partie
+        {
+            // Colonne 1
+            TableRow tr_row = new TableRow(this);
+            TextView tv_col1 = new TextView(this);
+            tv_col1.setText("Joueur " + i);
+            tv_col1.setTextColor(Color.BLACK);
+            tv_col1.setGravity(Gravity.CENTER);
+            tr_row.addView(tv_col1);
+            // Colonne 2
+            TextView tv_col2 = new TextView(this);
+            tv_col2.setText("0");
+            tv_col2.setTextColor(Color.BLACK);
+            tv_col2.setGravity(Gravity.CENTER);
+            tr_row.addView(tv_col2);
+            // Colonne 3
+            TextView tv_col3 = new TextView(this);
+            tv_col3.setText("0");
+            tv_col3.setTextColor(Color.BLACK);
+            tv_col3.setGravity(Gravity.CENTER);
+            tr_row.addView(tv_col3);
+            // Colonne 4
+            TextView tv_col4 = new TextView(this);
+            tv_col4.setText("0");
+            tv_col4.setTextColor(Color.BLACK);
+            tv_col4.setGravity(Gravity.CENTER);
+            tr_row.addView(tv_col4);
+            tlTable.addView(tr_row);
+        }
+    }
+
+    /* ================================================================================ */
+    /* =================== GESTION BOUTON RETOUR DU SMARTPHONE ======================== */
     /* ================================================================================ */
     @Override
     public void onBackPressed()
     {
         new AlertDialog.Builder(this)
                 .setTitle("Veuillez confirmer")
-                .setMessage("Voulez-vous vraiment quitter cette page ?")
+                .setMessage("Voulez-vous vraiment quitter le jeu ?")
                 .setNegativeButton(android.R.string.no, null)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener()
                 {
@@ -488,4 +595,6 @@ public class PlayActivity extends Activity implements SensorEventListener
                     }
                 }).create().show();
     }
-}
+
+} // Fin PlayActivity
+

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/background_light">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_menu_title"
+        android:text="@string/play_title"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:textColor="@color/red"
+        android:textSize="25sp"
+        android:paddingTop="25dp"
+        android:textStyle="bold" />
+
+    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id = "@+id/tl_table"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center">
+    </TableLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <Button
+            android:id="@+id/btn_quit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/play_quit"
+            android:layout_weight="1"
+            android:layout_gravity="bottom"
+            android:background="@drawable/sct_btn_gamesettings_validate"
+            android:textColor="@color/white"
+            android:layout_marginRight="1dp"
+            android:textSize="17sp" />
+
+        <Button
+            android:id="@+id/btn_dismiss"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/play_dismiss"
+            android:layout_weight="1"
+            android:layout_gravity="bottom"
+            android:background="@drawable/sct_btn_gamesettings_validate"
+            android:textColor="@color/white"
+            android:layout_marginLeft="1dp"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+</LinearLayout>
