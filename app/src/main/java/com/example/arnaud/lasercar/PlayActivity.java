@@ -1,8 +1,6 @@
 package com.example.arnaud.lasercar;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -10,12 +8,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.os.Build;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.support.v7.widget.PopupMenu;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -23,7 +17,6 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.os.Handler;
-
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -32,7 +25,6 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 
 public class PlayActivity extends Activity implements SensorEventListener
@@ -130,10 +122,6 @@ public class PlayActivity extends Activity implements SensorEventListener
                     decrement("laser");
                     handlerLaser.postDelayed(new RptUpdaterLaser(), DELAY);
                 }
-                else if(timeLaser > 0 && timeLaser < 100) // Exclu le cas où timeLaser == 0
-                {
-                    handlerLaser.postDelayed(new RptUpdaterLaser(), DELAY);
-                }
             }
             sendLaser(); // envoi données laser tant que l'on reste appuyé sur le bouton laser
         }
@@ -168,7 +156,6 @@ public class PlayActivity extends Activity implements SensorEventListener
         tvPseudo = (TextView) findViewById(R.id.tv_pseudo); tvPseudo.setTypeface(abolition);
         tvScore = (TextView) findViewById(R.id.tv_score); tvScore.setTypeface(abolition);
         tvInfo = (TextView) findViewById(R.id.tv_info); tvInfo.setTypeface(abolition);
-
 
         /* ================================================================================ */
         /* ================= RECEPTION DONNEES DE L'ACTIVITE GAMESETTINGS ================= */
@@ -304,7 +291,7 @@ public class PlayActivity extends Activity implements SensorEventListener
         else if(s.equals("laser"))
         {
             timeLaser++;
-            tvLaser.setText("Laser : " + timeLaser + "s");
+            tvLaser.setText("Laser : " + (int) Math.floor(timeLaser*1.25) + "%"); // Mul par 1.25 pour passage échelle 0-80 à 0-100
         }
     }
     // Fonctions gestion décrémentation
@@ -318,7 +305,7 @@ public class PlayActivity extends Activity implements SensorEventListener
         else if(s.equals("laser"))
         {
             timeLaser--;
-            tvLaser.setText("Laser : " + timeLaser + "s");
+            tvLaser.setText("Laser : " + (int) Math.floor(timeLaser*1.25) + "%");
         }
     }
 
@@ -474,7 +461,7 @@ public class PlayActivity extends Activity implements SensorEventListener
     }
 
     /* ================================================================================ */
-    /* ========================== GESTION BOUTON RETOUR =============================== */
+    /* =================== GESTION BOUTON RETOUR DU SMARTPHONE ======================== */
     /* ================================================================================ */
     @Override
     public void onBackPressed()

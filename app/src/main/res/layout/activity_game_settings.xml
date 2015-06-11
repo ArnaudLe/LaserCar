@@ -78,7 +78,7 @@
 
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/gamesettings_validate"
         android:id="@+id/btn_validate"
@@ -86,7 +86,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:textColor="@color/white"
-        android:background="@color/red"
+        android:background="@drawable/sct_btn_gamesettings_validate"
         android:textSize="17sp"
         android:textStyle="bold" />
 
