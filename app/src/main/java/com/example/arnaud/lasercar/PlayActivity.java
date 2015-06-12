@@ -69,10 +69,12 @@ public class PlayActivity extends Activity implements SensorEventListener
     // Attributs mise en forme des données
     private TextView tvLaser;
     // Attribus connexion RPI et envoi de données
-    public Socket mySocket = null;
+    public Socket clientSocket = null;
     public static final int SERVERPORT = 40450;
     public static final String SERVER_IP = "10.5.5.1";
     public static boolean flagPlayActivity;
+    // Attributs réception de données RPI
+    private ServerSocketWrapper serverSocketWrapper;
     // Attributs divers
     private TextView tvTest;
     private TextView tvPseudo;
@@ -282,6 +284,13 @@ public class PlayActivity extends Activity implements SensorEventListener
                         }
                 );
 
+
+        /* ================================================================================ */
+        /* ======================== RECEPTION DONNEES DE LA RPI =========================== */
+        /* ================================================================================ */
+        serverSocketWrapper = new ServerSocketWrapper();
+        serverSocketWrapper.startSocket();
+
         /* ================================================================================ */
         /* ======================= GESTION BOUTON START POPUP WINDOW ====================== */
         /* ================================================================================ */
@@ -442,14 +451,14 @@ public class PlayActivity extends Activity implements SensorEventListener
         {
             try {
                 InetAddress serverAddr = InetAddress.getByName(SERVER_IP);
-                mySocket = new Socket(serverAddr, SERVERPORT);
+                clientSocket = new Socket(serverAddr, SERVERPORT);
 
                 // Envoi de données
                 while(flagPlayActivity)
                 {
                     OutputStream outputStream;
                     String msg = setFormMotorAngle();
-                    outputStream = mySocket.getOutputStream();
+                    outputStream = clientSocket.getOutputStream();
                     PrintStream printStream = new PrintStream(outputStream);
                     printStream.print(msg);
                     //printStream.close();
@@ -470,7 +479,7 @@ public class PlayActivity extends Activity implements SensorEventListener
         try {
             String data = setFormLaser();
             PrintWriter out = new PrintWriter(new BufferedWriter(
-                    new OutputStreamWriter(mySocket.getOutputStream())),
+                    new OutputStreamWriter(clientSocket.getOutputStream())),
                     true);
             out.println(data);
         } catch (Exception e) {
@@ -486,7 +495,7 @@ public class PlayActivity extends Activity implements SensorEventListener
         try {
             String data = setFormProfile();
             PrintWriter out = new PrintWriter(new BufferedWriter(
-                    new OutputStreamWriter(mySocket.getOutputStream())),
+                    new OutputStreamWriter(clientSocket.getOutputStream())),
                     true);
             out.println(data);
         } catch (Exception e) {
@@ -498,7 +507,7 @@ public class PlayActivity extends Activity implements SensorEventListener
         try {
             String data = setFormGame();
             PrintWriter out = new PrintWriter(new BufferedWriter(
-                    new OutputStreamWriter(mySocket.getOutputStream())),
+                    new OutputStreamWriter(clientSocket.getOutputStream())),
                     true);
             out.println(data);
         } catch (Exception e) {
@@ -594,6 +603,13 @@ public class PlayActivity extends Activity implements SensorEventListener
                         PlayActivity.super.onBackPressed();
                     }
                 }).create().show();
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        serverSocketWrapper.stopSocket();
     }
 
 } // Fin PlayActivity
