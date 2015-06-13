@@ -62,16 +62,15 @@ public class PlayActivity extends Activity implements SensorEventListener
     // Attributs laser
     private Handler handlerLaser = new Handler();
     private ImageButton ibLaser;
+    private TextView tvLaser;
     private boolean lAutoIncrement = false; // indique laser état Tirer ou non
     private int timeLaser;
     // Attributs start
     private ImageButton ibStart;
-    // Attributs mise en forme des données
-    private TextView tvLaser;
     // Attribus connexion RPI et envoi de données
     public Socket clientSocket = null;
     public static final int SERVERPORT = 40450;
-    public static final String SERVER_IP = "10.5.5.1";
+    public static String SERVER_IP = "10.5.5.1";
     public static boolean flagPlayActivity;
     // Attributs réception de données RPI
     private ServerSocketWrapper serverSocketWrapper;
@@ -185,12 +184,14 @@ public class PlayActivity extends Activity implements SensorEventListener
         data_time = gameSettingsIntent.getStringExtra("message_time");
         //tvTest.setText(data_time);
 
-        // Configuration Profile + Partie (Envoi des données vers RPI)
-        setFormProfile();
-        setFormGame();
+        /* ================================================================================ */
+        /* ======================== CREATION DU SERVEUR ANDROID =========================== */
+        /* ================================================================================ */
+        serverSocketWrapper = new ServerSocketWrapper();
+        serverSocketWrapper.startSocket();
 
         /* ================================================================================ */
-        /* =============== CONNEXION RASPBERRY ET ENVOIE DE DONNEES VITESSE =============== */
+        /* =============== CONNEXION RPI + CONFIG ET ENVOIE DE DONNEES VITESSE =============== */
         /* ================================================================================ */
         connectrpi();
         flagPlayActivity = true;
@@ -284,13 +285,6 @@ public class PlayActivity extends Activity implements SensorEventListener
                         }
                 );
 
-
-        /* ================================================================================ */
-        /* ======================== RECEPTION DONNEES DE LA RPI =========================== */
-        /* ================================================================================ */
-        serverSocketWrapper = new ServerSocketWrapper();
-        serverSocketWrapper.startSocket();
-
         /* ================================================================================ */
         /* ======================= GESTION BOUTON START POPUP WINDOW ====================== */
         /* ================================================================================ */
@@ -306,19 +300,33 @@ public class PlayActivity extends Activity implements SensorEventListener
                     final PopupWindow popupWindow = new PopupWindow(popupView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
                     initTable(popupView, data_player);
-                    Button btnDismiss = (Button)popupView.findViewById(R.id.btn_dismiss);
 
+                    Button btnDismiss = (Button)popupView.findViewById(R.id.btn_dismiss);
                     btnDismiss.setOnClickListener
-                    (
-                        new Button.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(View v)
-                            {
-                                popupWindow.dismiss();
-                            }
-                        }
-                    );
+                            (
+                                    new Button.OnClickListener()
+                                    {
+                                        @Override
+                                        public void onClick(View v)
+                                        {
+                                            popupWindow.dismiss();
+                                        }
+                                    }
+                            );
+
+                    Button btnQuit = (Button)popupView.findViewById(R.id.btn_quit);
+                    btnQuit.setOnClickListener
+                            (
+                                    new Button.OnClickListener()
+                                    {
+                                        @Override
+                                        public void onClick(View v)
+                                        {
+                                            onBackPressed();
+                                        }
+                                    }
+                            );
+
                     popupWindow.setAnimationStyle(R.style.AnimationPopup);
                     popupWindow.showAtLocation(ibStart, Gravity.CENTER, 0, 0);
                 }
@@ -428,13 +436,13 @@ public class PlayActivity extends Activity implements SensorEventListener
     // Met sous la bonne forme pour envoi de données pour l'identification
     public String setFormProfile()
     {
-        return getAdresseIP() + "&setprofile&[name&" + data_pseudo + "&type&android&role&true_master&feedback&Yes]";
+        return getAdresseIP() + "&setprofile&name&" + data_pseudo + "&type&android&role&true_master&feedback&True";
     }
 
     // Met sous la bonne forme pour envoi de données pour la configuration d'une partie
     public String setFormGame()
     {
-        return getAdresseIP() + "&setgame&[n_player&" + data_player + "&time&" + data_time + "]";
+        return getAdresseIP() + "&setgame&n_player&" + data_player + "&time&" + data_time;
     }
 
     /* ================================================================================ */
@@ -449,11 +457,17 @@ public class PlayActivity extends Activity implements SensorEventListener
         @Override
         public void run()
         {
-            try {
+            try
+            {
+                // Connexion Android vers RPI
                 InetAddress serverAddr = InetAddress.getByName(SERVER_IP);
                 clientSocket = new Socket(serverAddr, SERVERPORT);
 
-                // Envoi de données
+                // Envoie de données Configuration Profile + Partie
+                setProfile();
+                setGame();
+
+                // Envoi de données vitesse
                 while(flagPlayActivity)
                 {
                     OutputStream outputStream;
@@ -611,6 +625,5 @@ public class PlayActivity extends Activity implements SensorEventListener
         super.onDestroy();
         serverSocketWrapper.stopSocket();
     }
-
 } // Fin PlayActivity
 

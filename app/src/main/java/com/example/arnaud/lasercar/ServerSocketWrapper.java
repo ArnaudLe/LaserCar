@@ -1,4 +1,6 @@
 package com.example.arnaud.lasercar;
+import android.util.Log;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -11,12 +13,11 @@ public class ServerSocketWrapper
     /* =========================== DECLARATION ATTRIBUTS ============================== */
     /* ================================================================================ */
     // Attributs réception de données RPI
-    public String TARGET_HIT_COMMAND = "Vous avez touché";
-    public String MYSELF_HIT_COMMAND = "Vous avez été touché";
-    public String TARGET_HIT_MESSAGE = "Ok j'ai touché";
-    public String MYSELF_HIT_MESSAGE = "Ok j'ai été touché";
-    public String UNKNOWN_COMMAND_MESSAGE = "Je ne comprends pas";
-
+    public String TARGET_HIT_RECEIVE = "Vous avez touché";
+    public String MYSELF_HIT_RECEIVE = "Vous avez été touché";
+    public String TARGET_HIT_SEND = "Ok j'ai touché";
+    public String MYSELF_HIT_SEND = "Ok j'ai été touché";
+    public String UNKNOWN_COMMAND_SEND = "Je ne comprends pas";
 
     private ServerSocket serverSocket = null;
     private Thread serverSocketThread;
@@ -24,13 +25,14 @@ public class ServerSocketWrapper
     /**
      * Method to start thread running socket functionality
      */
-    public void startSocket(){
+    public void startSocket()
+    {
         serverSocketThread = new Thread(new Runnable()
         {
             @Override
             public void run()
             {
-                android.util.Log.i("TrackingFlow", "Server socket is ready and listening...");
+                Log.i("TrackingFlow", "Server socket is ready and listening...");
                 Socket socket = null;
                 try {
                     serverSocket = new ServerSocket(8080);
@@ -105,21 +107,22 @@ public class ServerSocketWrapper
      * This method will be used as command processing,
      * based on the command received will return a different
      * response back to the client...
+     * @param command
      *
      */
     private String processCommand(String command)
     {
-        if(TARGET_HIT_COMMAND.equals(command))
+        if(TARGET_HIT_RECEIVE.equals(command))
         {
-            return TARGET_HIT_MESSAGE;
+            return TARGET_HIT_SEND;
         }
         else
         {
-            if (MYSELF_HIT_COMMAND.equals(command))
+            if (MYSELF_HIT_RECEIVE.equals(command))
             {
-                return MYSELF_HIT_MESSAGE;
+                return MYSELF_HIT_SEND;
             }
-            return UNKNOWN_COMMAND_MESSAGE;
+            return UNKNOWN_COMMAND_SEND;
         }
     }
 
@@ -136,6 +139,4 @@ public class ServerSocketWrapper
             } catch (IOException e) {e.printStackTrace();}
         }
     }
-
-
-}
+} // Fin class ServerSocketWrapper
