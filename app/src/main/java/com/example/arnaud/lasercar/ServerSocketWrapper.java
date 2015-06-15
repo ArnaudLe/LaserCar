@@ -35,7 +35,7 @@ public class ServerSocketWrapper
                 Log.i("TrackingFlow", "Server socket is ready and listening...");
                 Socket socket = null;
                 try {
-                    serverSocket = new ServerSocket(8080);
+                    serverSocket = new ServerSocket(40450);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

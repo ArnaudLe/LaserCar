@@ -32,8 +32,12 @@
     <string name="gamesettings_validate">Valider</string>
 
     <!-- ======================================== -->
-    <!-- ====== PLAYACTIVITY (POPUP WINDOW) ===== -->
+    <!-- ============= PLAYACTIVITY  ============ -->
     <!-- ======================================== -->
+    <string name="play_pseudo">Annuler</string>
+    <string name="play_score">Score : 0</string>
+
+
     <string name="play_title">LASER CAR - MENU START</string>
     <string name="play_quit">Quitter la partie</string>
     <string name="play_dismiss">Annuler</string>

@@ -11,6 +11,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.Gravity;
@@ -67,10 +68,12 @@ public class PlayActivity extends Activity implements SensorEventListener
     private int timeLaser;
     // Attributs start
     private ImageButton ibStart;
+    // Attributs Timer
+    private TextView tvTimer;
     // Attribus connexion RPI et envoi de données
     public Socket clientSocket = null;
     public static final int SERVERPORT = 40450;
-    public static String SERVER_IP = "10.5.5.1";
+    public static String SERVER_IP = "10.5.5.1"; // old : 192.168.43.113
     public static boolean flagPlayActivity;
     // Attributs réception de données RPI
     private ServerSocketWrapper serverSocketWrapper;
@@ -164,6 +167,8 @@ public class PlayActivity extends Activity implements SensorEventListener
         ibLaser = (ImageButton) findViewById(R.id.ib_laser);
         // start
         ibStart = (ImageButton) findViewById(R.id.ib_start);
+        // timer
+        tvTimer = (TextView) findViewById(R.id.tv_timer); tvTimer.setTypeface(abolition);
         // autre
         tvTest = (TextView) findViewById(R.id.tv_test);
         tvPseudo = (TextView) findViewById(R.id.tv_pseudo); tvPseudo.setTypeface(abolition);
@@ -195,6 +200,25 @@ public class PlayActivity extends Activity implements SensorEventListener
         /* ================================================================================ */
         connectrpi();
         flagPlayActivity = true;
+
+        /* ================================================================================ */
+        /* ================================ GESTION TIMER ================================= */
+        /* ================================================================================ */
+        // Récupération du temps de la partie choisi
+        String time = data_time.substring(0, 1); // 5 ou 7 min
+        if(data_time.equals("10min")) time=data_time.substring(0,2); // 10min
+
+        // Création du timer
+        new CountDownTimer(Integer.parseInt(time)*60*1000, 1000)
+        {
+            public void onTick(long millisUntilFinished) {tvTimer.setText("Timer : " + millisUntilFinished / 1000);}
+
+            public void onFinish()
+            {
+                tvTimer.setText("TEMPS ÉCOULÉ !");
+                sendTimer();
+            }
+        }.start();
 
         /* ================================================================================ */
         /* ============================ GESTION BOUTONS VITESSE =========================== */
@@ -442,7 +466,7 @@ public class PlayActivity extends Activity implements SensorEventListener
     // Met sous la bonne forme pour envoi de données pour la configuration d'une partie
     public String setFormGame()
     {
-        return getAdresseIP() + "&setgame&n_player&" + data_player + "&time&" + data_time;
+        return getAdresseIP() + "&setgame&" + data_player + "&" + data_time;
     }
 
     /* ================================================================================ */
@@ -520,6 +544,22 @@ public class PlayActivity extends Activity implements SensorEventListener
     {
         try {
             String data = setFormGame();
+            PrintWriter out = new PrintWriter(new BufferedWriter(
+                    new OutputStreamWriter(clientSocket.getOutputStream())),
+                    true);
+            out.println(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /* ================================================================================ */
+    /* ========================== ENVOI DE DONNEES TIMER ============================== */
+    /* ================================================================================ */
+    public void sendTimer()
+    {
+        try {
+            String data = "stop";
             PrintWriter out = new PrintWriter(new BufferedWriter(
                     new OutputStreamWriter(clientSocket.getOutputStream())),
                     true);
