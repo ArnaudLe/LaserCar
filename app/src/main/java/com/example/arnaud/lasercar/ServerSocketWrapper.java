@@ -13,11 +13,14 @@ public class ServerSocketWrapper
     /* =========================== DECLARATION ATTRIBUTS ============================== */
     /* ================================================================================ */
     // Attributs réception de données RPI
-    public String TARGET_HIT_RECEIVE = "Vous avez touché";
+    public String TARGET_HIT_RECEIVE = "lol";
     public String MYSELF_HIT_RECEIVE = "Vous avez été touché";
-    public String TARGET_HIT_SEND = "Ok j'ai touché";
+    public String TARGET_HIT_SEND = "Ok lol";
     public String MYSELF_HIT_SEND = "Ok j'ai été touché";
     public String UNKNOWN_COMMAND_SEND = "Je ne comprends pas";
+
+    private String command;
+    private boolean flagReceiveData = false;
 
     private ServerSocket serverSocket = null;
     private Thread serverSocketThread;
@@ -46,7 +49,8 @@ public class ServerSocketWrapper
 
                         InputStream is = socket.getInputStream();
                         int lockSeconds = 5;
-                        String command = readMessageFromClientLockingThread(is, lockSeconds);
+                        command = readMessageFromClientLockingThread(is, lockSeconds);
+                        flagReceiveData = true; // On a reçu une donnée
                         String messageResponse = processCommand(command);
                         PrintWriter out = new PrintWriter(socket.getOutputStream());
                         out.println(messageResponse);
@@ -139,4 +143,9 @@ public class ServerSocketWrapper
             } catch (IOException e) {e.printStackTrace();}
         }
     }
+
+    // Accesseurs
+    public String getData(){return command;}
+    public boolean getFlagReceiveData(){return flagReceiveData;}
+    public void setFlagReceiveData(boolean v) {this.flagReceiveData = v;}
 } // Fin class ServerSocketWrapper

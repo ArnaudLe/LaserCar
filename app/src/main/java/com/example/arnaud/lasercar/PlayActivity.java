@@ -190,13 +190,15 @@ public class PlayActivity extends Activity implements SensorEventListener
         //tvTest.setText(data_time);
 
         /* ================================================================================ */
-        /* ======================== CREATION DU SERVEUR ANDROID =========================== */
+        /* ============ CREATION DU SERVEUR ANDROID ET RECEPTION DE DONNEES =============== */
         /* ================================================================================ */
         serverSocketWrapper = new ServerSocketWrapper();
         serverSocketWrapper.startSocket();
 
+        receiveData();
+
         /* ================================================================================ */
-        /* =============== CONNEXION RPI + CONFIG ET ENVOIE DE DONNEES VITESSE =============== */
+        /* ============== CONNEXION RPI + CONFIG ET ENVOIE DE DONNEES VITESSE ============= */
         /* ================================================================================ */
         connectrpi();
         flagPlayActivity = true;
@@ -460,13 +462,14 @@ public class PlayActivity extends Activity implements SensorEventListener
     // Met sous la bonne forme pour envoi de données pour l'identification
     public String setFormProfile()
     {
-        return getAdresseIP() + "&setprofile&name&" + data_pseudo + "&type&android&role&true_master&feedback&True";
+        return getAdresseIP() + "&setprofile&name*" + data_pseudo + "*type*android*role*true_master*feedback*True";
     }
 
     // Met sous la bonne forme pour envoi de données pour la configuration d'une partie
     public String setFormGame()
     {
-        return getAdresseIP() + "&setgame&" + data_player + "&" + data_time;
+        return getAdresseIP() + "&setgame&" + data_player + "*" + data_time;
+
     }
 
     /* ================================================================================ */
@@ -489,7 +492,9 @@ public class PlayActivity extends Activity implements SensorEventListener
 
                 // Envoie de données Configuration Profile + Partie
                 setProfile();
+                Thread.sleep(2000);
                 setGame();
+                Thread.sleep(2000);
 
                 // Envoi de données vitesse
                 while(flagPlayActivity)
@@ -559,7 +564,7 @@ public class PlayActivity extends Activity implements SensorEventListener
     public void sendTimer()
     {
         try {
-            String data = "stop";
+            String data = getAdresseIP() + "&stop&" + "eric";
             PrintWriter out = new PrintWriter(new BufferedWriter(
                     new OutputStreamWriter(clientSocket.getOutputStream())),
                     true);
@@ -568,6 +573,31 @@ public class PlayActivity extends Activity implements SensorEventListener
             e.printStackTrace();
         }
     }
+
+    /* ================================================================================ */
+    /* ========================== RECEPTION DE DONNEES ================================ */
+    /* ================================================================================ */
+    public void receiveData() {new Thread(new ReceiveDataThread()).start();}
+
+
+    // Thread qui gère la réception de données (Android serveur)
+    class ReceiveDataThread implements Runnable
+    {
+        @Override
+        public void run()
+        {
+            while(flagPlayActivity)
+            {
+                if(serverSocketWrapper.getFlagReceiveData()) // Si on reçoit une donnée sur le serveur
+                {
+                    String data = serverSocketWrapper.getData(); // on récupère la donnée
+                    Log.d("MonTag", "Je reçois une donnée");
+                    //tvTest.setText(data);
+                    serverSocketWrapper.setFlagReceiveData(false); // on indique qu'on l'a récupéré
+                }
+            }
+        }
+    } // Fin ReceiveDataThread
 
     /* ================================================================================ */
     /* ====================== GESTION DU TABLEAU DES SCORES =========================== */

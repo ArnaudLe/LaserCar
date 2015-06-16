@@ -14,7 +14,6 @@ public class HomeActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homescreen);
-        PlayActivity.flagPlayActivity = false; // Flag indiquant que l'on n'est pas dans PlayActivity
     }
 
     /* Appelee quand l'utilisateur appuie sur le bouton Jouer ! */

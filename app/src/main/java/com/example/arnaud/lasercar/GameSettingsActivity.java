@@ -27,6 +27,8 @@ public class GameSettingsActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_settings);
 
+        PlayActivity.flagPlayActivity = false; // Flag indiquant que l'on n'est pas dans PlayActivity
+
         NumberPicker np = (NumberPicker) findViewById(R.id.np_player);
         np.setMaxValue(8);
         np.setMinValue(2);
