@@ -159,11 +159,11 @@ public class PlayActivity extends Activity implements SensorEventListener
         accelerometer = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sm.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         // vitesse
-        tvVitesse = (TextView) findViewById(R.id.tv_vitesse);
+        tvVitesse = (TextView) findViewById(R.id.tv_vitesse); tvVitesse.setTypeface(abolition);
         ibAvancer = (ImageButton) findViewById(R.id.ib_avancer);
         ibReculer = (ImageButton) findViewById(R.id.ib_reculer);
         // laser
-        tvLaser = (TextView) findViewById(R.id.tv_laser);
+        tvLaser = (TextView) findViewById(R.id.tv_laser); tvLaser.setTypeface(abolition);
         ibLaser = (ImageButton) findViewById(R.id.ib_laser);
         // start
         ibStart = (ImageButton) findViewById(R.id.ib_start);
@@ -211,7 +211,7 @@ public class PlayActivity extends Activity implements SensorEventListener
         if(data_time.equals("10min")) time=data_time.substring(0,2); // 10min
 
         // Création du timer
-        new CountDownTimer(Integer.parseInt(time)*60*1000, 1000)
+        new CountDownTimer(Integer.parseInt(time)*60*1000, 1000) // Integer.parseInt(time)*60*1000
         {
             public void onTick(long millisUntilFinished) {tvTimer.setText("Timer : " + millisUntilFinished / 1000);}
 

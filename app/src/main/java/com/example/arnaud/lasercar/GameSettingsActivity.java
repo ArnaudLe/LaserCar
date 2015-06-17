@@ -23,7 +23,8 @@ public class GameSettingsActivity extends ActionBarActivity
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_settings);
 
@@ -31,14 +32,15 @@ public class GameSettingsActivity extends ActionBarActivity
 
         NumberPicker np = (NumberPicker) findViewById(R.id.np_player);
         np.setMaxValue(8);
-        np.setMinValue(2);
+        np.setMinValue(1);
 
         np.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS); // désactive clavier pour le NumberPicker
     }
 
     // Masque le clavier après un clic ailleurs que l'EditText
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(MotionEvent event)
+    {
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.
                 INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
@@ -46,6 +48,7 @@ public class GameSettingsActivity extends ActionBarActivity
     }
 
     /* Appelee quand l'utilisateur appuie sur le bouton Valider */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void sendData(View view)
     {
         Intent intent = new Intent(this, PlayActivity.class);

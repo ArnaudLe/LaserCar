@@ -13,14 +13,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Vitesse : 0%"
-        android:id="@+id/tv_vitesse" />
+        android:id="@+id/tv_vitesse"
+        android:textColor="@color/red"
+        android:textSize="18sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Laser : 0%"
-        android:id="@+id/tv_laser" />
+        android:id="@+id/tv_laser"
+        android:textSize="18sp"
+        android:textColor="@color/red" />
 
     <RelativeLayout
         android:layout_width="fill_parent"

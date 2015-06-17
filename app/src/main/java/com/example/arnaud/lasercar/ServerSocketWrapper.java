@@ -148,4 +148,5 @@ public class ServerSocketWrapper
     public String getData(){return command;}
     public boolean getFlagReceiveData(){return flagReceiveData;}
     public void setFlagReceiveData(boolean v) {this.flagReceiveData = v;}
+
 } // Fin class ServerSocketWrapper
