@@ -4,7 +4,7 @@
     <color name="white">#ffffffff</color>
     <color name="black">#ff000000</color>
     <color name="black_transparent">#aa000000</color>
-    <color name="gray">#ff363636</color>
+    <color name="gray">#ff262626</color>
     <color name="red">#a43939</color>
     <color name="light_red">#b44444</color>
 </resources>

@@ -9,7 +9,8 @@ public class HowToPlayTab2Activity extends ActionBarActivity
 {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_how_to_play_tab2);
         getSupportActionBar().setTitle("Comment jouer ?");

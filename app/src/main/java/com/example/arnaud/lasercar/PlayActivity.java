@@ -11,6 +11,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.Gravity;
@@ -62,17 +63,20 @@ public class PlayActivity extends Activity implements SensorEventListener
     // Attributs laser
     private Handler handlerLaser = new Handler();
     private ImageButton ibLaser;
+    private TextView tvLaser;
     private boolean lAutoIncrement = false; // indique laser état Tirer ou non
     private int timeLaser;
     // Attributs start
     private ImageButton ibStart;
-    // Attributs mise en forme des données
-    private TextView tvLaser;
+    // Attributs Timer
+    private TextView tvTimer;
     // Attribus connexion RPI et envoi de données
-    public Socket mySocket = null;
+    public Socket clientSocket = null;
     public static final int SERVERPORT = 40450;
-    public static final String SERVER_IP = "10.5.5.1";
+    public static String SERVER_IP = "10.5.5.1"; // old : 192.168.43.113
     public static boolean flagPlayActivity;
+    // Attributs réception de données RPI
+    private ServerSocketWrapper serverSocketWrapper;
     // Attributs divers
     private TextView tvTest;
     private TextView tvPseudo;
@@ -155,14 +159,16 @@ public class PlayActivity extends Activity implements SensorEventListener
         accelerometer = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sm.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         // vitesse
-        tvVitesse = (TextView) findViewById(R.id.tv_vitesse);
+        tvVitesse = (TextView) findViewById(R.id.tv_vitesse); tvVitesse.setTypeface(abolition);
         ibAvancer = (ImageButton) findViewById(R.id.ib_avancer);
         ibReculer = (ImageButton) findViewById(R.id.ib_reculer);
         // laser
-        tvLaser = (TextView) findViewById(R.id.tv_laser);
+        tvLaser = (TextView) findViewById(R.id.tv_laser); tvLaser.setTypeface(abolition);
         ibLaser = (ImageButton) findViewById(R.id.ib_laser);
         // start
         ibStart = (ImageButton) findViewById(R.id.ib_start);
+        // timer
+        tvTimer = (TextView) findViewById(R.id.tv_timer); tvTimer.setTypeface(abolition);
         // autre
         tvTest = (TextView) findViewById(R.id.tv_test);
         tvPseudo = (TextView) findViewById(R.id.tv_pseudo); tvPseudo.setTypeface(abolition);
@@ -183,15 +189,38 @@ public class PlayActivity extends Activity implements SensorEventListener
         data_time = gameSettingsIntent.getStringExtra("message_time");
         //tvTest.setText(data_time);
 
-        // Configuration Profile + Partie (Envoi des données vers RPI)
-        setFormProfile();
-        setFormGame();
+        /* ================================================================================ */
+        /* ============ CREATION DU SERVEUR ANDROID ET RECEPTION DE DONNEES =============== */
+        /* ================================================================================ */
+        serverSocketWrapper = new ServerSocketWrapper();
+        serverSocketWrapper.startSocket();
+
+        receiveData();
 
         /* ================================================================================ */
-        /* =============== CONNEXION RASPBERRY ET ENVOIE DE DONNEES VITESSE =============== */
+        /* ============== CONNEXION RPI + CONFIG ET ENVOIE DE DONNEES VITESSE ============= */
         /* ================================================================================ */
         connectrpi();
         flagPlayActivity = true;
+
+        /* ================================================================================ */
+        /* ================================ GESTION TIMER ================================= */
+        /* ================================================================================ */
+        // Récupération du temps de la partie choisi
+        String time = data_time.substring(0, 1); // 5 ou 7 min
+        if(data_time.equals("10min")) time=data_time.substring(0,2); // 10min
+
+        // Création du timer
+        new CountDownTimer(Integer.parseInt(time)*60*1000, 1000) // Integer.parseInt(time)*60*1000
+        {
+            public void onTick(long millisUntilFinished) {tvTimer.setText("Timer : " + millisUntilFinished / 1000);}
+
+            public void onFinish()
+            {
+                tvTimer.setText("TEMPS ÉCOULÉ !");
+                sendTimer();
+            }
+        }.start();
 
         /* ================================================================================ */
         /* ============================ GESTION BOUTONS VITESSE =========================== */
@@ -297,19 +326,33 @@ public class PlayActivity extends Activity implements SensorEventListener
                     final PopupWindow popupWindow = new PopupWindow(popupView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
                     initTable(popupView, data_player);
-                    Button btnDismiss = (Button)popupView.findViewById(R.id.btn_dismiss);
 
+                    Button btnDismiss = (Button)popupView.findViewById(R.id.btn_dismiss);
                     btnDismiss.setOnClickListener
-                    (
-                        new Button.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(View v)
-                            {
-                                popupWindow.dismiss();
-                            }
-                        }
-                    );
+                            (
+                                    new Button.OnClickListener()
+                                    {
+                                        @Override
+                                        public void onClick(View v)
+                                        {
+                                            popupWindow.dismiss();
+                                        }
+                                    }
+                            );
+
+                    Button btnQuit = (Button)popupView.findViewById(R.id.btn_quit);
+                    btnQuit.setOnClickListener
+                            (
+                                    new Button.OnClickListener()
+                                    {
+                                        @Override
+                                        public void onClick(View v)
+                                        {
+                                            onBackPressed();
+                                        }
+                                    }
+                            );
+
                     popupWindow.setAnimationStyle(R.style.AnimationPopup);
                     popupWindow.showAtLocation(ibStart, Gravity.CENTER, 0, 0);
                 }
@@ -419,13 +462,14 @@ public class PlayActivity extends Activity implements SensorEventListener
     // Met sous la bonne forme pour envoi de données pour l'identification
     public String setFormProfile()
     {
-        return getAdresseIP() + "&setprofile&[name&" + data_pseudo + "&type&android&role&true_master&feedback&Yes]";
+        return getAdresseIP() + "&setprofile&name*" + data_pseudo + "*type*android*role*true_master*feedback*True";
     }
 
     // Met sous la bonne forme pour envoi de données pour la configuration d'une partie
     public String setFormGame()
     {
-        return getAdresseIP() + "&setgame&[n_player&" + data_player + "&time&" + data_time + "]";
+        return getAdresseIP() + "&setgame&" + data_player + "*" + data_time;
+
     }
 
     /* ================================================================================ */
@@ -440,16 +484,24 @@ public class PlayActivity extends Activity implements SensorEventListener
         @Override
         public void run()
         {
-            try {
+            try
+            {
+                // Connexion Android vers RPI
                 InetAddress serverAddr = InetAddress.getByName(SERVER_IP);
-                mySocket = new Socket(serverAddr, SERVERPORT);
+                clientSocket = new Socket(serverAddr, SERVERPORT);
 
-                // Envoi de données
+                // Envoie de données Configuration Profile + Partie
+                setProfile();
+                Thread.sleep(2000);
+                setGame();
+                Thread.sleep(2000);
+
+                // Envoi de données vitesse
                 while(flagPlayActivity)
                 {
                     OutputStream outputStream;
                     String msg = setFormMotorAngle();
-                    outputStream = mySocket.getOutputStream();
+                    outputStream = clientSocket.getOutputStream();
                     PrintStream printStream = new PrintStream(outputStream);
                     printStream.print(msg);
                     //printStream.close();
@@ -470,7 +522,7 @@ public class PlayActivity extends Activity implements SensorEventListener
         try {
             String data = setFormLaser();
             PrintWriter out = new PrintWriter(new BufferedWriter(
-                    new OutputStreamWriter(mySocket.getOutputStream())),
+                    new OutputStreamWriter(clientSocket.getOutputStream())),
                     true);
             out.println(data);
         } catch (Exception e) {
@@ -486,7 +538,7 @@ public class PlayActivity extends Activity implements SensorEventListener
         try {
             String data = setFormProfile();
             PrintWriter out = new PrintWriter(new BufferedWriter(
-                    new OutputStreamWriter(mySocket.getOutputStream())),
+                    new OutputStreamWriter(clientSocket.getOutputStream())),
                     true);
             out.println(data);
         } catch (Exception e) {
@@ -498,13 +550,54 @@ public class PlayActivity extends Activity implements SensorEventListener
         try {
             String data = setFormGame();
             PrintWriter out = new PrintWriter(new BufferedWriter(
-                    new OutputStreamWriter(mySocket.getOutputStream())),
+                    new OutputStreamWriter(clientSocket.getOutputStream())),
                     true);
             out.println(data);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    /* ================================================================================ */
+    /* ========================== ENVOI DE DONNEES TIMER ============================== */
+    /* ================================================================================ */
+    public void sendTimer()
+    {
+        try {
+            String data = getAdresseIP() + "&stop&" + "eric";
+            PrintWriter out = new PrintWriter(new BufferedWriter(
+                    new OutputStreamWriter(clientSocket.getOutputStream())),
+                    true);
+            out.println(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /* ================================================================================ */
+    /* ========================== RECEPTION DE DONNEES ================================ */
+    /* ================================================================================ */
+    public void receiveData() {new Thread(new ReceiveDataThread()).start();}
+
+
+    // Thread qui gère la réception de données (Android serveur)
+    class ReceiveDataThread implements Runnable
+    {
+        @Override
+        public void run()
+        {
+            while(flagPlayActivity)
+            {
+                if(serverSocketWrapper.getFlagReceiveData()) // Si on reçoit une donnée sur le serveur
+                {
+                    String data = serverSocketWrapper.getData(); // on récupère la donnée
+                    Log.d("MonTag", "Je reçois une donnée");
+                    //tvTest.setText(data);
+                    serverSocketWrapper.setFlagReceiveData(false); // on indique qu'on l'a récupéré
+                }
+            }
+        }
+    } // Fin ReceiveDataThread
 
     /* ================================================================================ */
     /* ====================== GESTION DU TABLEAU DES SCORES =========================== */
@@ -596,5 +689,11 @@ public class PlayActivity extends Activity implements SensorEventListener
                 }).create().show();
     }
 
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        serverSocketWrapper.stopSocket();
+    }
 } // Fin PlayActivity
 

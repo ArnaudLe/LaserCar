@@ -6,28 +6,54 @@
     android:layout_height="match_parent"
     android:background="@drawable/img_play_background"
     android:weightSum="1"
-    android:gravity="center">
+    android:gravity="center"
+    android:keepScreenOn="true">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Vitesse : 0%"
-        android:id="@+id/tv_vitesse" />
+        android:id="@+id/tv_vitesse"
+        android:textColor="@color/red"
+        android:textSize="18sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Laser : 0%"
-        android:id="@+id/tv_laser" />
+        android:id="@+id/tv_laser"
+        android:textSize="18sp"
+        android:textColor="@color/red" />
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ib_start"
-        android:layout_gravity="end|right"
-        android:background="@color/transparent"
-        android:src="@drawable/sct_btn_play_start"/>
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="TIMER : "
+            android:id="@+id/tv_timer"
+            android:textColor="@color/white"
+            android:background="@color/red"
+            android:textSize="23dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ib_start"
+            android:background="@color/transparent"
+            android:src="@drawable/sct_btn_play_start"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -80,21 +106,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Joueur 1"
+                android:text="@string/play_pseudo"
                 android:id="@+id/tv_pseudo"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:textSize="20sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Score : "
+                android:text="@string/play_score"
                 android:id="@+id/tv_score"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:textSize="39sp"
+                android:textSize="30sp"
                 android:textColor="@color/red" />
 
             <TextView
