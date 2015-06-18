@@ -1,9 +1,9 @@
 package com.example.arnaud.lasercar;
 import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -19,8 +19,9 @@ public class ServerSocketWrapper
     public String MYSELF_HIT_SEND = "Ok j'ai été touché";
     public String UNKNOWN_COMMAND_SEND = "Je ne comprends pas";
 
-    private String command;
+    private String command = "";
     private boolean flagReceiveData = false;
+    public volatile boolean isRunning = true;
 
     private ServerSocket serverSocket = null;
     private Thread serverSocketThread;
@@ -35,29 +36,35 @@ public class ServerSocketWrapper
             @Override
             public void run()
             {
-                Log.i("TrackingFlow", "Server socket is ready and listening...");
                 Socket socket = null;
                 try {
                     serverSocket = new ServerSocket(40450);
+                    Log.d("MyTag", "Création du serveur");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                while (!Thread.currentThread().isInterrupted())
+                while (!Thread.currentThread().isInterrupted() && isRunning)
                 {
                     try {
                         socket = serverSocket.accept();
+                        Log.d("MyTag", "serverSocket.accept()");
 
-                        InputStream is = socket.getInputStream();
-                        int lockSeconds = 5;
-                        command = readMessageFromClientLockingThread(is, lockSeconds);
-                        flagReceiveData = true; // On a reçu une donnée
-                        String messageResponse = processCommand(command);
-                        PrintWriter out = new PrintWriter(socket.getOutputStream());
-                        out.println(messageResponse);
-                        out.flush();
-                        is.close();
-                        out.close();
+                        while (PlayActivity.flagPlayActivity)
+                        {
+                            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(1024);
+                            byte[] buffer = new byte[1024];
 
+                            int bytesRead;
+                            InputStream inputStream = socket.getInputStream();
+
+                            //notice: inputStream.read() will block if no data return
+                            while ((bytesRead = inputStream.read(buffer)) != -1)
+                            {
+                                byteArrayOutputStream.write(buffer, 0, bytesRead);
+                                command = byteArrayOutputStream.toString("UTF-8");
+                                byteArrayOutputStream.reset();
+                            }
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -83,25 +90,8 @@ public class ServerSocketWrapper
      */
     private String readMessageFromClientLockingThread(InputStream is, int lockSeconds) throws IOException
     {
-        lockSeconds *= 1000;//Convert to ms...
-		/*
-		 * This code locks the thread until there's information available in the
-		 * client's output buffer OR it's been lockSeconds with no info...
-		 */
-        long lockThreadCheckpoint = System.currentTimeMillis();
-        int availableBytes = is.available();
-        while(availableBytes < 1 && (System.currentTimeMillis() < lockThreadCheckpoint + lockSeconds))
-        {
-            try{Thread.sleep(10);}catch(InterruptedException ie){ie.printStackTrace();}
-            availableBytes = is.available();
-        }
 
-		/*
-		 * Create a byte array of the size of the data available in the client buffer.
-		 * As good practice, big data is supposed to be chopped in smaller parts, so for
-		 * this example we will not assume any buffer size and we will, make a buffer
-		 * of the size of the actual data.(Maximum socket buffer size is OS dependent).
-		 */
+        int availableBytes = is.available();
         byte[] buffer = new byte[availableBytes];
         is.read(buffer, 0, availableBytes);
         return new String(buffer);
@@ -130,23 +120,16 @@ public class ServerSocketWrapper
         }
     }
 
-    /**
-     * Method to stop thread running socket functionality
-     */
-    public void stopSocket()
+    public void stopSocket() throws IOException
     {
-        serverSocketThread.interrupt();
-        if(serverSocket != null)
-        {
-            try {
-                serverSocket.close();
-            } catch (IOException e) {e.printStackTrace();}
-        }
+        isRunning  = false;
+        serverSocket.close();
     }
 
     // Accesseurs
     public String getData(){return command;}
-    public boolean getFlagReceiveData(){return flagReceiveData;}
-    public void setFlagReceiveData(boolean v) {this.flagReceiveData = v;}
+    public void setData(String s){this.command = s;}
+    public boolean getIsRunning(){return isRunning;}
+    public void setIsRunning(boolean v) {this.isRunning = v;}
 
 } // Fin class ServerSocketWrapper
