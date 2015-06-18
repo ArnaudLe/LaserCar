@@ -18,7 +18,7 @@
     <!-- ======================================== -->
     <!-- ============= HOMEACTIVITY ============= -->
     <!-- ======================================== -->
-    <string name="home_footer">Laser Car Project - Parrot Awards &amp; ESIEE Paris - Version 0.8</string>
+    <string name="home_footer">Laser Car Project - Parrot Awards &amp; ESIEE Paris - Version 0.9</string>
 
     <!-- ======================================== -->
     <!-- ========= GAMESETTINGSACTIVITY ========= -->
@@ -34,8 +34,9 @@
     <!-- ======================================== -->
     <!-- ============= PLAYACTIVITY  ============ -->
     <!-- ======================================== -->
-    <string name="play_pseudo">Annuler</string>
+    <string name="play_pseudo">Joueur 1</string>
     <string name="play_score">Score : 0</string>
+    <string name="play_info"></string>
 
 
     <string name="play_title">LASER CAR - MENU START</string>
