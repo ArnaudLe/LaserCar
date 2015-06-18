@@ -12,6 +12,7 @@ import android.hardware.SensorManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Vibrator;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.Gravity;
@@ -34,6 +35,7 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.Toast;
 
 
 public class PlayActivity extends Activity implements SensorEventListener
@@ -73,7 +75,7 @@ public class PlayActivity extends Activity implements SensorEventListener
     // Attribus connexion RPI et envoi de données
     public Socket clientSocket = null;
     public static final int SERVERPORT = 40450;
-    public static String SERVER_IP = "10.5.5.1"; // old : 192.168.43.113
+    public static String SERVER_IP = "192.168.0.39";
     public static boolean flagPlayActivity;
     // Attributs réception de données RPI
     private ServerSocketWrapper serverSocketWrapper;
@@ -81,6 +83,7 @@ public class PlayActivity extends Activity implements SensorEventListener
     private TextView tvTest;
     private TextView tvPseudo;
     private TextView tvScore;
+    private int score = 0;
     private TextView tvInfo;
 
     // Thread qui s'exécute en parallèle : gère la vitesse
@@ -194,8 +197,9 @@ public class PlayActivity extends Activity implements SensorEventListener
         /* ================================================================================ */
         serverSocketWrapper = new ServerSocketWrapper();
         serverSocketWrapper.startSocket();
-
+        Log.d("MyTag", "Après startSocket()");
         receiveData();
+        Log.d("MyTag", "Après receiveData()");
 
         /* ================================================================================ */
         /* ============== CONNEXION RPI + CONFIG ET ENVOIE DE DONNEES VITESSE ============= */
@@ -374,7 +378,7 @@ public class PlayActivity extends Activity implements SensorEventListener
     {
         if(s.equals("vitesse"))
         {
-            mVitesse++;
+            mVitesse = mVitesse + 4;
             tvVitesse.setText("Vitesse : " + mVitesse + "%");
         }
         else if(s.equals("laser"))
@@ -388,7 +392,7 @@ public class PlayActivity extends Activity implements SensorEventListener
     {
         if(s.equals("vitesse"))
         {
-            mVitesse--;
+            mVitesse = mVitesse - 4;
             tvVitesse.setText("Vitesse : " + mVitesse + "%");
         }
         else if(s.equals("laser"))
@@ -460,17 +464,10 @@ public class PlayActivity extends Activity implements SensorEventListener
     }
 
     // Met sous la bonne forme pour envoi de données pour l'identification
-    public String setFormProfile()
-    {
-        return getAdresseIP() + "&setprofile&name*" + data_pseudo + "*type*android*role*true_master*feedback*True";
-    }
+    public String setFormProfile(){return getAdresseIP() + "&setprofile&name*" + data_pseudo + "*type*android*role*true_master*feedback*True";}
 
     // Met sous la bonne forme pour envoi de données pour la configuration d'une partie
-    public String setFormGame()
-    {
-        return getAdresseIP() + "&setgame&" + data_player + "*" + data_time;
-
-    }
+    public String setFormGame(){return getAdresseIP() + "&setgame&" + data_player + "*" + data_time;}
 
     /* ================================================================================ */
     /* ================ CONNEXION RASPBERRY ET ENVOI DE DONNEES VITESSE =============== */
@@ -586,18 +583,71 @@ public class PlayActivity extends Activity implements SensorEventListener
         @Override
         public void run()
         {
-            while(flagPlayActivity)
+            while(serverSocketWrapper.getIsRunning()) // récupère la donnée uniquement quand ServerSocketWrapper est actif
             {
-                if(serverSocketWrapper.getFlagReceiveData()) // Si on reçoit une donnée sur le serveur
+                // On récupère la donnée
+                final String data = serverSocketWrapper.getData();
+                if(!data.equals("")) Log.d("MyTag", "Android reçoit " + data);
+
+                // On traite la donnée
+                if (data.contains("&"))
                 {
-                    String data = serverSocketWrapper.getData(); // on récupère la donnée
-                    Log.d("MonTag", "Je reçois une donnée");
-                    //tvTest.setText(data);
-                    serverSocketWrapper.setFlagReceiveData(false); // on indique qu'on l'a récupéré
+                    // On split la string selon &
+                    String[] splitData = data.split("&");
+                    final String dataKey = splitData[0];
+                    final String dataValue = splitData[1];
+
+                    // Dans le cas où l'on veut afficher les données sur l'UI
+                    runOnUiThread(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            switch (dataKey)
+                            {
+                                case "hitTarget":
+                                    hitTarget(dataValue);
+                                    break;
+                                case "beTouched":
+                                    beTouched(dataValue);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    });
+                }
+
+                // On réinitialise le contenu de la donnée
+                serverSocketWrapper.setData(""); //
+
+                // Ectoute toutes les 100ms
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         }
     } // Fin ReceiveDataThread
+
+    /* ================================================================================ */
+    /* =================== PROCESS COMMAND DES DONNEES RECUES ======================== */
+    /* ================================================================================ */
+    public void hitTarget(String s)
+    {
+        tvInfo.setText("Vous avez touché " + s + " !\n +2");
+        score = score + 2;
+        tvScore.setText(("Score : " + score));
+        ((Vibrator)getSystemService(VIBRATOR_SERVICE)).vibrate(200);
+    }
+    public void beTouched(String s)
+    {
+        tvInfo.setText("Vous avez été touché par " + s + " !\n +1");
+        score--;
+        tvScore.setText(("Score : " + score));
+        ((Vibrator)getSystemService(VIBRATOR_SERVICE)).vibrate(800);
+    }
 
     /* ================================================================================ */
     /* ====================== GESTION DU TABLEAU DES SCORES =========================== */
@@ -693,7 +743,12 @@ public class PlayActivity extends Activity implements SensorEventListener
     protected void onDestroy()
     {
         super.onDestroy();
-        serverSocketWrapper.stopSocket();
+        try {
+            serverSocketWrapper.stopSocket();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Log.d("MyTag", "serverSocketWrapper.stopSocket()");
     }
 } // Fin PlayActivity
 
