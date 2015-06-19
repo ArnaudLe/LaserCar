@@ -37,7 +37,6 @@ import java.net.Socket;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Toast;
 
-
 public class PlayActivity extends Activity implements SensorEventListener
 {
     /* ================================================================================ */
@@ -70,6 +69,8 @@ public class PlayActivity extends Activity implements SensorEventListener
     private int timeLaser;
     // Attributs start
     private ImageButton ibStart;
+    private String[] scorePlayer; // ex : scorePlayer[0] = Eric;2;0;4
+    private String[] scoreDataPlayer; // ex : scoreDataPlayer[0] = Eric
     // Attributs Timer
     private TextView tvTimer;
     // Attribus connexion RPI et envoi de données
@@ -83,8 +84,9 @@ public class PlayActivity extends Activity implements SensorEventListener
     private TextView tvTest;
     private TextView tvPseudo;
     private TextView tvScore;
-    private int score = 0;
     private TextView tvInfo;
+    private int score = 0;
+
 
     // Thread qui s'exécute en parallèle : gère la vitesse
     class RptUpdaterVitesse implements Runnable
@@ -170,6 +172,8 @@ public class PlayActivity extends Activity implements SensorEventListener
         ibLaser = (ImageButton) findViewById(R.id.ib_laser);
         // start
         ibStart = (ImageButton) findViewById(R.id.ib_start);
+        scoreDataPlayer = new String[4];
+        scorePlayer = new String[8];
         // timer
         tvTimer = (TextView) findViewById(R.id.tv_timer); tvTimer.setTypeface(abolition);
         // autre
@@ -191,6 +195,9 @@ public class PlayActivity extends Activity implements SensorEventListener
         // Réception du nombre de joueurs
         data_time = gameSettingsIntent.getStringExtra("message_time");
         //tvTest.setText(data_time);
+
+        // Initialisation du tableau des scores
+        for(int i = 0 ; i < 8 ; i++){scorePlayer[i] = "-;-;-;-";}
 
         /* ================================================================================ */
         /* ============ CREATION DU SERVEUR ANDROID ET RECEPTION DE DONNEES =============== */
@@ -329,7 +336,7 @@ public class PlayActivity extends Activity implements SensorEventListener
                     View popupView = layoutInflater.inflate(R.layout.popup_window, null);
                     final PopupWindow popupWindow = new PopupWindow(popupView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
-                    initTable(popupView, data_player);
+                    initTable(popupView, data_player, scorePlayer);
 
                     Button btnDismiss = (Button)popupView.findViewById(R.id.btn_dismiss);
                     btnDismiss.setOnClickListener
@@ -611,6 +618,8 @@ public class PlayActivity extends Activity implements SensorEventListener
                                 case "beTouched":
                                     beTouched(dataValue);
                                     break;
+                                case "score":
+                                    receiveScore(dataValue);
                                 default:
                                     break;
                             }
@@ -648,74 +657,92 @@ public class PlayActivity extends Activity implements SensorEventListener
         tvScore.setText(("Score : " + score));
         ((Vibrator)getSystemService(VIBRATOR_SERVICE)).vibrate(800);
     }
+    public void receiveScore(String s)
+    {
+        // Séparation par joueur
+        if(s.contains("_"))
+        {
+            String[] splitData = s.split("_");
+            for(int i = 0 ; i < Integer.parseInt(data_player) ; i++){scorePlayer[i] = splitData[i];}
+        }
+    }
 
     /* ================================================================================ */
     /* ====================== GESTION DU TABLEAU DES SCORES =========================== */
     /* ================================================================================ */
-    public void initTable(View popupView, String nb_player)
+    public void initTable(View popupView, String nb_player, String[] s)
     {
         TableLayout tlTable = (TableLayout) popupView.findViewById(R.id.tl_table);
 
-        // Remplissage LIGNE 1
-        TableRow tr_table_row1 = new TableRow(this);
+        // Remplissage LIGNE 0
+        TableRow tr_table_row0 = new TableRow(this);
+        // Titre 0
+        TextView tv_table_row0_col0 = new TextView(this);
+        tv_table_row0_col0.setText("JOUEUR");
+        tv_table_row0_col0.setTypeface(Typeface.DEFAULT_BOLD);
+        tv_table_row0_col0.setPadding(15, 5, 15, 5);
+        tv_table_row0_col0.setTextColor(Color.BLACK);
+        tr_table_row0.addView(tv_table_row0_col0);
         // Titre 1
-        TextView tv_table_row1_col1 = new TextView(this);
-        tv_table_row1_col1.setText("JOUEUR");
-        tv_table_row1_col1.setTypeface(Typeface.DEFAULT_BOLD);
-        tv_table_row1_col1.setPadding(15, 5, 15, 5);
-        tv_table_row1_col1.setTextColor(Color.BLACK);
-        tr_table_row1.addView(tv_table_row1_col1);
+        TextView tv_table_row0_col1 = new TextView(this);
+        tv_table_row0_col1.setText("A TOUCHÉ");
+        tv_table_row0_col1.setTypeface(Typeface.DEFAULT_BOLD);
+        tv_table_row0_col1.setPadding(15, 5, 15, 5);
+        tv_table_row0_col1.setTextColor(Color.BLACK);
+        tr_table_row0.addView(tv_table_row0_col1);
         // Titre 2
-        TextView tv_table_row1_col2 = new TextView(this);
-        tv_table_row1_col2.setText("A TOUCHÉ");
-        tv_table_row1_col2.setTypeface(Typeface.DEFAULT_BOLD);
-        tv_table_row1_col2.setPadding(15, 5, 15, 5);
-        tv_table_row1_col2.setTextColor(Color.BLACK);
-        tr_table_row1.addView(tv_table_row1_col2);
+        TextView tv_table_row0_col2 = new TextView(this);
+        tv_table_row0_col2.setText("A ÉTÉ TOUCHÉ");
+        tv_table_row0_col2.setTypeface(Typeface.DEFAULT_BOLD);
+        tv_table_row0_col2.setPadding(15, 5, 15, 5);
+        tv_table_row0_col2.setTextColor(Color.BLACK);
+        tr_table_row0.addView(tv_table_row0_col2);
         // Titre 3
-        TextView tv_table_row1_col3 = new TextView(this);
-        tv_table_row1_col3.setText("A ÉTÉ TOUCHÉ");
-        tv_table_row1_col3.setTypeface(Typeface.DEFAULT_BOLD);
-        tv_table_row1_col3.setPadding(15, 5, 15, 5);
-        tv_table_row1_col3.setTextColor(Color.BLACK);
-        tr_table_row1.addView(tv_table_row1_col3);
-        // Titre 4
-        TextView tv_table_row1_col4 = new TextView(this);
-        tv_table_row1_col4.setText("SCORE");
-        tv_table_row1_col4.setTypeface(Typeface.DEFAULT_BOLD);
-        tv_table_row1_col4.setPadding(15, 5, 15, 5);
-        tv_table_row1_col4.setTextColor(Color.BLACK);
-        tr_table_row1.addView(tv_table_row1_col4);
-        tlTable.addView(tr_table_row1);
+        TextView tv_table_row0_col3 = new TextView(this);
+        tv_table_row0_col3.setText("SCORE");
+        tv_table_row0_col3.setTypeface(Typeface.DEFAULT_BOLD);
+        tv_table_row0_col3.setPadding(15, 5, 15, 5);
+        tv_table_row0_col3.setTextColor(Color.BLACK);
+        tr_table_row0.addView(tv_table_row0_col3);
+        tlTable.addView(tr_table_row0);
 
         // Remplissage des autres lignes
-        for (int i = 1; i < Integer.parseInt(nb_player) + 1; i++) // boucle sur le nombre de joueurs de la partie
+        for (int i = 0; i < Integer.parseInt(nb_player) ; i++) // boucle sur le nombre de joueurs de la partie
         {
-            // Colonne 1
+            if(s[i].contains(";"))
+            {
+                String[] dataSplit = s[i].split(";");
+                scoreDataPlayer[0] = dataSplit[0];
+                scoreDataPlayer[1] = dataSplit[1];
+                scoreDataPlayer[2] = dataSplit[2];
+                scoreDataPlayer[3] = dataSplit[3];
+            }
+
+            // Colonne 0
             TableRow tr_row = new TableRow(this);
+            TextView tv_col0 = new TextView(this);
+            tv_col0.setText(scoreDataPlayer[0]);
+            tv_col0.setTextColor(Color.BLACK);
+            tv_col0.setGravity(Gravity.CENTER);
+            tr_row.addView(tv_col0);
+            // Colonne 1
             TextView tv_col1 = new TextView(this);
-            tv_col1.setText("Joueur " + i);
+            tv_col1.setText(scoreDataPlayer[1]);
             tv_col1.setTextColor(Color.BLACK);
             tv_col1.setGravity(Gravity.CENTER);
             tr_row.addView(tv_col1);
             // Colonne 2
             TextView tv_col2 = new TextView(this);
-            tv_col2.setText("0");
+            tv_col2.setText(scoreDataPlayer[2]);
             tv_col2.setTextColor(Color.BLACK);
             tv_col2.setGravity(Gravity.CENTER);
             tr_row.addView(tv_col2);
             // Colonne 3
             TextView tv_col3 = new TextView(this);
-            tv_col3.setText("0");
+            tv_col3.setText(scoreDataPlayer[3]);
             tv_col3.setTextColor(Color.BLACK);
             tv_col3.setGravity(Gravity.CENTER);
             tr_row.addView(tv_col3);
-            // Colonne 4
-            TextView tv_col4 = new TextView(this);
-            tv_col4.setText("0");
-            tv_col4.setTextColor(Color.BLACK);
-            tv_col4.setGravity(Gravity.CENTER);
-            tr_row.addView(tv_col4);
             tlTable.addView(tr_row);
         }
     }
