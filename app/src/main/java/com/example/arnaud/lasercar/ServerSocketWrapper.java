@@ -81,23 +81,6 @@ public class ServerSocketWrapper
     }
 
     /**
-     * This method reads the data available in the client buffer or
-     * waits the seconds specified in lockSeconds until there's data
-     * available...
-     * @param is
-     * @param lockSeconds
-     * @return data from client as String
-     */
-    private String readMessageFromClientLockingThread(InputStream is, int lockSeconds) throws IOException
-    {
-
-        int availableBytes = is.available();
-        byte[] buffer = new byte[availableBytes];
-        is.read(buffer, 0, availableBytes);
-        return new String(buffer);
-    }
-
-    /**
      * This method will be used as command processing,
      * based on the command received will return a different
      * response back to the client...
