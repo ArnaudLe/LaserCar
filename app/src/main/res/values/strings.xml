@@ -35,10 +35,12 @@
     <!-- ======================================== -->
     <!-- ============= PLAYACTIVITY  ============ -->
     <!-- ======================================== -->
+    <string name="play_vitesse">Vitesse : 0%</string>
+    <string name="play_laser">Laser : 0%</string>
+    <string name="play_timer">Timer</string>
     <string name="play_pseudo">Joueur 1</string>
     <string name="play_score">Score : 0</string>
     <string name="play_info"></string>
-
 
     <string name="play_title">LASER CAR - MENU START</string>
     <string name="play_quit">Quitter la partie</string>

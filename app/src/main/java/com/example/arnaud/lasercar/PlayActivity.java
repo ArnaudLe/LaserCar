@@ -77,8 +77,10 @@ public class PlayActivity extends Activity implements SensorEventListener
     private TextView tvTimer;
     // Attribus connexion RPI et envoi de données
     public Socket clientSocket = null;
+    public Socket clientSocket2 = null;
     public static final int SERVERPORT = 40450;
     public static String SERVER_IP = "10.5.5.27";
+    public String SERVER_IP2 = "";
     public static boolean flagPlayActivity;
     // Attributs réception de données RPI
     private ServerSocketWrapper serverSocketWrapper;
@@ -157,25 +159,6 @@ public class PlayActivity extends Activity implements SensorEventListener
         /* ================================================================================ */
         connectrpi();
         flagPlayActivity = true;
-
-        /* ================================================================================ */
-        /* ================================ GESTION TIMER ================================= */
-        /* ================================================================================ */
-        // Récupération du temps de la partie choisi
-        String time = data_time.substring(0, 1); // 5 ou 7 min
-        if(data_time.equals("10min")) time=data_time.substring(0,2); // 10min
-
-        // Création du timer
-        new CountDownTimer(Integer.parseInt(time)*60*1000, 1000) // Integer.parseInt(time)*60*1000
-        {
-            public void onTick(long millisUntilFinished) {tvTimer.setText("Timer : " + millisUntilFinished / 1000);}
-
-            public void onFinish()
-            {
-                tvTimer.setText("TEMPS ÉCOULÉ !");
-                sendTimer();
-            }
-        }.start();
 
         /* ================================================================================ */
         /* ============================ GESTION BOUTONS VITESSE =========================== */
@@ -477,7 +460,7 @@ public class PlayActivity extends Activity implements SensorEventListener
     }
 
     // Met sous la bonne forme pour envoi de données pour l'identification
-    public String setFormProfile(){return getAdresseIP() + "&setprofile&name*" + data_pseudo + "*type*android*role*true_master*feedback*True";}
+    public String setFormProfile(){return getAdresseIP() + "&setprofile&name*" + data_pseudo + "*type*android*role*master*feedback*True";}
 
     // Met sous la bonne forme pour envoi de données pour la configuration d'une partie
     public String setFormGame(){return getAdresseIP() + "&setgame&" + data_player + "*" + data_time;}
@@ -488,7 +471,7 @@ public class PlayActivity extends Activity implements SensorEventListener
     // Fonction connexion smartphone à RPI et envoi de données (mal optimisé)
     public void connectrpi() {new Thread(new ClientThread()).start();}
 
-    // Thread qui gère la connexion et l'envoi de données
+    // Thread qui gère la connexion et l'envoi de données CONNEXION 1
     class ClientThread implements Runnable
     {
         @Override
@@ -499,20 +482,40 @@ public class PlayActivity extends Activity implements SensorEventListener
                 // Connexion Android vers RPI
                 InetAddress serverAddr = InetAddress.getByName(SERVER_IP);
                 clientSocket = new Socket(serverAddr, SERVERPORT);
-                Log.d("MyTag", "Création du client");
+                Log.d("MyTag", "Création du client vers RPI Host");
 
                 // Envoie de données Configuration Profile + Partie
-                setProfile();
+                setProfile(clientSocket);
                 Thread.sleep(2000);
-                setGame();
-                Thread.sleep(2000);
+
+            } catch (IOException | InterruptedException e1) {
+                e1.printStackTrace();
+            }
+        }
+    } // Fin ClientThread
+
+    // Fonction connexion smartphone à RPI et envoi de données (mal optimisé)
+    public void connectrpi2() {new Thread(new ClientThread2()).start();}
+
+    // Thread qui gère la connexion et l'envoi de données CONNEXION 2
+    class ClientThread2 implements Runnable
+    {
+        @Override
+        public void run()
+        {
+            try
+            {
+                // Connexion Android vers RPI
+                InetAddress serverAddr = InetAddress.getByName(SERVER_IP2);
+                clientSocket2 = new Socket(serverAddr, SERVERPORT);
+                Log.d("MyTag", "Création du client vers ma RPI2");
 
                 // Envoi de données vitesse
                 while(flagPlayActivity)
                 {
                     OutputStream outputStream;
                     String msg = setFormMotorAngle();
-                    outputStream = clientSocket.getOutputStream();
+                    outputStream = clientSocket2.getOutputStream();
                     PrintStream printStream = new PrintStream(outputStream);
                     printStream.print(msg);
                     //printStream.close();
@@ -544,12 +547,12 @@ public class PlayActivity extends Activity implements SensorEventListener
     /* ================================================================================ */
     /* =================== ENVOI DE DONNEES SETPROFILE + SETGAME ====================== */
     /* ================================================================================ */
-    public void setProfile()
+    public void setProfile(Socket s)
     {
         try {
             String data = setFormProfile();
             PrintWriter out = new PrintWriter(new BufferedWriter(
-                    new OutputStreamWriter(clientSocket.getOutputStream())),
+                    new OutputStreamWriter(s.getOutputStream())),
                     true);
             out.println(data);
         } catch (Exception e) {
@@ -633,6 +636,13 @@ public class PlayActivity extends Activity implements SensorEventListener
                                     break;
                                 case "score":
                                     receiveScore(dataValue);
+                                    break;
+                                case "associated":
+                                    setIP2(dataValue);
+                                    break;
+                                case "start":
+                                    startTimer();
+                                    break;
                                 default:
                                     break;
                             }
@@ -679,6 +689,29 @@ public class PlayActivity extends Activity implements SensorEventListener
             for(int i = 0 ; i < Integer.parseInt(data_player) ; i++){scorePlayer[i] = splitData[i];}
         }
     }
+    public void setIP2(String s)
+    {
+        SERVER_IP2 = s;
+        connectrpi2();
+    }
+    public void startTimer()
+    {
+        // Récupération du temps de la partie choisi
+        String time = data_time.substring(0, 1); // 5 ou 7 min
+        if(data_time.equals("10min")) time=data_time.substring(0,2); // 10min
+
+        new CountDownTimer(Integer.parseInt(time)*60*1000, 1000) // Integer.parseInt(time)*60*1000
+        {
+            public void onTick(long millisUntilFinished) {tvTimer.setText("Timer : " + millisUntilFinished / 1000);}
+
+            public void onFinish()
+            {
+                tvTimer.setText("TEMPS ÉCOULÉ !");
+                sendTimer();
+            }
+        }.start();
+    }
+
 
     /* ================================================================================ */
     /* ====================== GESTION DU TABLEAU DES SCORES =========================== */
