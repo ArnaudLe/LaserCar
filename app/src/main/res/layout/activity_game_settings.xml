@@ -57,7 +57,7 @@
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/gamesettings_5minutes"
+            android:text="@string/gamesettings_1minute"
             android:id="@+id/rb_5minutes"
             android:buttonTint="@color/red"
             android:layout_gravity="center_vertical" />

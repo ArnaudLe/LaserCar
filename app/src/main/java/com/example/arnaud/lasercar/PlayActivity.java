@@ -39,13 +39,15 @@ import android.widget.Toast;
 
 public class PlayActivity extends Activity implements SensorEventListener
 {
-    /* ================================================================================ */
-    /* =========================== DECLARATION ATTRIBUTS ============================== */
-    /* ================================================================================ */
+    /* ========================================================================================================================================================= */
+    /* ========================================================================================================================================================= */
+    /* ============================================================ DECLARATION ATTRIBUTS EN GLOBAL ============================================================ */
+    /* ========================================================================================================================================================= */
+    /* ========================================================================================================================================================= */
     // Attributs réception de données GameSettings
-    String data_pseudo;
-    String data_player;
-    String data_time;
+    private String data_pseudo;
+    private String data_player;
+    private String data_time;
     // Attributs accéléromètre
     private Sensor accelerometer;
     private SensorManager sm;
@@ -76,7 +78,7 @@ public class PlayActivity extends Activity implements SensorEventListener
     // Attribus connexion RPI et envoi de données
     public Socket clientSocket = null;
     public static final int SERVERPORT = 40450;
-    public static String SERVER_IP = "192.168.0.39";
+    public static String SERVER_IP = "10.5.5.27";
     public static boolean flagPlayActivity;
     // Attributs réception de données RPI
     private ServerSocketWrapper serverSocketWrapper;
@@ -87,67 +89,11 @@ public class PlayActivity extends Activity implements SensorEventListener
     private TextView tvInfo;
     private int score = 0;
 
-
-    // Thread qui s'exécute en parallèle : gère la vitesse
-    class RptUpdaterVitesse implements Runnable
-    {
-        public void run()
-        {
-            // Appuie sur avancer OU Relache reculer
-            if((mVitesse >= 0 && mAutoIncrement) || (mVitesse < 0 && !mAutoDecrement))
-            {
-                if(mVitesse < 100)
-                {
-                    increment("vitesse");
-                    handlerVitesse.postDelayed(new RptUpdaterVitesse(), DELAY);
-                }
-                else handlerVitesse.postDelayed(new RptUpdaterVitesse(), DELAY);
-            }
-
-            // Relache avancer OU Appuie reculer
-            else if((mVitesse > 0 && !mAutoIncrement) || (mVitesse <= 0 && mAutoDecrement))
-            {
-                if(mVitesse > -100)
-                {
-                    decrement("vitesse");
-                    handlerVitesse.postDelayed(new RptUpdaterVitesse(), DELAY);
-                }
-                else handlerVitesse.postDelayed(new RptUpdaterVitesse(), DELAY);
-            }
-        }
-    } // Fin thread vitesse
-
-    // Thread qui s'exécute en parallèle : gère le laser
-    class RptUpdaterLaser implements Runnable
-    {
-        public void run()
-        {
-            // Appuie sur tirer
-            if(lAutoIncrement)
-            {
-                if(timeLaser < 2000/DELAY) // Stop à 2 secondes
-                {
-                    increment("laser");
-                    handlerLaser.postDelayed(new RptUpdaterLaser(), DELAY);
-                }
-                else handlerLaser.postDelayed(new RptUpdaterLaser(), DELAY);
-            }
-
-            // Relache tirer
-            else
-            {
-                if(timeLaser > 0)  // Stop à 0 secondes
-                {
-                    decrement("laser");
-                    handlerLaser.postDelayed(new RptUpdaterLaser(), DELAY);
-                }
-            }
-            sendLaser(); // envoi données laser tant que l'on reste appuyé sur le bouton laser
-        }
-    } // Fin thread laser
-
-
-    // Redéfinition de la fonction principale
+    /* ========================================================================================================================================================= */
+    /* ========================================================================================================================================================= */
+    /* ============================================================= ON CREATE FONCTION PRINCIPALE ============================================================= */
+    /* ========================================================================================================================================================= */
+    /* ========================================================================================================================================================= */
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -204,9 +150,7 @@ public class PlayActivity extends Activity implements SensorEventListener
         /* ================================================================================ */
         serverSocketWrapper = new ServerSocketWrapper();
         serverSocketWrapper.startSocket();
-        Log.d("MyTag", "Après startSocket()");
         receiveData();
-        Log.d("MyTag", "Après receiveData()");
 
         /* ================================================================================ */
         /* ============== CONNEXION RPI + CONFIG ET ENVOIE DE DONNEES VITESSE ============= */
@@ -236,6 +180,35 @@ public class PlayActivity extends Activity implements SensorEventListener
         /* ================================================================================ */
         /* ============================ GESTION BOUTONS VITESSE =========================== */
         /* ================================================================================ */
+        // Thread qui s'exécute en parallèle : gère la vitesse
+        class RptUpdaterVitesse implements Runnable
+        {
+            public void run()
+            {
+                // Appuie sur avancer OU Relache reculer
+                if((mVitesse >= 0 && mAutoIncrement) || (mVitesse < 0 && !mAutoDecrement))
+                {
+                    if(mVitesse < 100)
+                    {
+                        increment("vitesse");
+                        handlerVitesse.postDelayed(new RptUpdaterVitesse(), DELAY);
+                    }
+                    else handlerVitesse.postDelayed(new RptUpdaterVitesse(), DELAY);
+                }
+
+                // Relache avancer OU Appuie reculer
+                else if((mVitesse > 0 && !mAutoIncrement) || (mVitesse <= 0 && mAutoDecrement))
+                {
+                    if(mVitesse > -100)
+                    {
+                        decrement("vitesse");
+                        handlerVitesse.postDelayed(new RptUpdaterVitesse(), DELAY);
+                    }
+                    else handlerVitesse.postDelayed(new RptUpdaterVitesse(), DELAY);
+                }
+            }
+        } // Fin thread vitesse
+
         // Bouton Avancer
         ibAvancer.setOnLongClickListener
                 (
@@ -295,6 +268,35 @@ public class PlayActivity extends Activity implements SensorEventListener
         /* ================================================================================ */
         /* ============================= GESTION BOUTON LASER ============================= */
         /* ================================================================================ */
+        // Thread qui s'exécute en parallèle : gère le laser
+        class RptUpdaterLaser implements Runnable
+        {
+            public void run()
+            {
+                // Appuie sur tirer
+                if(lAutoIncrement)
+                {
+                    if(timeLaser < 2000/DELAY) // Stop à 2 secondes
+                    {
+                        increment("laser");
+                        handlerLaser.postDelayed(new RptUpdaterLaser(), DELAY);
+                    }
+                    else handlerLaser.postDelayed(new RptUpdaterLaser(), DELAY);
+                }
+
+                // Relache tirer
+                else
+                {
+                    if(timeLaser > 0)  // Stop à 0 secondes
+                    {
+                        decrement("laser");
+                        handlerLaser.postDelayed(new RptUpdaterLaser(), DELAY);
+                    }
+                }
+                sendLaser(); // envoi données laser tant que l'on reste appuyé sur le bouton laser
+            }
+        } // Fin thread laser
+
         ibLaser.setOnLongClickListener
                 (
                         new View.OnLongClickListener()
@@ -371,11 +373,15 @@ public class PlayActivity extends Activity implements SensorEventListener
         );
     } // Fin onCreate : fonction principale
 
+
+    /* ========================================================================================================================================================= */
+    /* ========================================================================================================================================================= */
+    /* ============================================================== FONCTIONS CLIENT ANDROID ================================================================= */
+    /* ========================================================================================================================================================= */
+    /* ========================================================================================================================================================= */
     // Redéfinition nécessaire pour pouvoir utiliser l'accéléromètre
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy)
-    {
-    }
+    public void onAccuracyChanged(Sensor sensor, int accuracy){}
 
     /* ================================================================================ */
     /* ========= GESTION INCREMENTATION ET DECREMENTATION (VITESSE + LASER) =========== */
@@ -493,6 +499,7 @@ public class PlayActivity extends Activity implements SensorEventListener
                 // Connexion Android vers RPI
                 InetAddress serverAddr = InetAddress.getByName(SERVER_IP);
                 clientSocket = new Socket(serverAddr, SERVERPORT);
+                Log.d("MyTag", "Création du client");
 
                 // Envoie de données Configuration Profile + Partie
                 setProfile();
@@ -578,11 +585,17 @@ public class PlayActivity extends Activity implements SensorEventListener
         }
     }
 
-    /* ================================================================================ */
-    /* ========================== RECEPTION DE DONNEES ================================ */
-    /* ================================================================================ */
-    public void receiveData() {new Thread(new ReceiveDataThread()).start();}
+    /* ========================================================================================================================================================= */
+    /* ========================================================================================================================================================= */
+    /* ============================================================== FONCTIONS SERVEUR ANDROID ================================================================ */
+    /* ========================================================================================================================================================= */
+    /* ========================================================================================================================================================= */
 
+    /* ================================================================================ */
+    /* ================ CREATION SERVEUR ET RECEPTION DE DONNEES ====================== */
+    /* ================================================================================ */
+
+    public void receiveData() {new Thread(new ReceiveDataThread()).start();}
 
     // Thread qui gère la réception de données (Android serveur)
     class ReceiveDataThread implements Runnable
@@ -641,7 +654,7 @@ public class PlayActivity extends Activity implements SensorEventListener
     } // Fin ReceiveDataThread
 
     /* ================================================================================ */
-    /* =================== PROCESS COMMAND DES DONNEES RECUES ======================== */
+    /* =================== PROCESS COMMAND DES DONNEES RECUES ========================= */
     /* ================================================================================ */
     public void hitTarget(String s)
     {
@@ -747,9 +760,12 @@ public class PlayActivity extends Activity implements SensorEventListener
         }
     }
 
-    /* ================================================================================ */
-    /* =================== GESTION BOUTON RETOUR DU SMARTPHONE ======================== */
-    /* ================================================================================ */
+    /* ========================================================================================================================================================= */
+    /* ========================================================================================================================================================= */
+    /* ================================================================== FONCTIONS AUTRES ===================================================================== */
+    /* ========================================================================================================================================================= */
+    /* ========================================================================================================================================================= */
+
     @Override
     public void onBackPressed()
     {

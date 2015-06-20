@@ -26,6 +26,7 @@
     <string name="gamesettings_hint_pseudo">Entrez un pseudo</string>
     <string name="gamesettings_player">Nombre de joueurs</string>
     <string name="gamesettings_time">Durée de la partie</string>
+    <string name="gamesettings_1minute">1min </string>
     <string name="gamesettings_5minutes">5min </string>
     <string name="gamesettings_7minutes">7min </string>
     <string name="gamesettings_10minutes">10min </string>
