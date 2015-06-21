@@ -370,6 +370,7 @@ public class PlayActivity extends Activity implements SensorEventListener
         {
             timeLaser++;
             tvLaser.setText("Laser : " + (int) Math.floor(timeLaser*1.25) + "%"); // Mul par 1.25 pour passage échelle 0-80 à 0-100
+            if(timeLaser == 100/1.25) tvLaser.setText("Laser : 100% - SURCHAUFFE");
         }
     }
     // Fonctions gestion décrémentation
@@ -637,14 +638,14 @@ public class PlayActivity extends Activity implements SensorEventListener
         tvInfo.setText("Vous avez touché " + s + " !\n +2");
         score = score + 2;
         tvScore.setText(("Score : " + score));
-        //((Vibrator)getSystemService(VIBRATOR_SERVICE)).vibrate(200);
+        ((Vibrator)getSystemService(VIBRATOR_SERVICE)).vibrate(100);
     }
     public void beTouched(String s)
     {
         tvInfo.setText("Vous avez été touché par " + s + " !\n -1");
         score--;
         tvScore.setText(("Score : " + score));
-        //((Vibrator)getSystemService(VIBRATOR_SERVICE)).vibrate(800);
+        ((Vibrator)getSystemService(VIBRATOR_SERVICE)).vibrate(400);
     }
     public void receiveScore(String s)
     {
