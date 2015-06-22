@@ -7,7 +7,6 @@ import android.view.MenuItem;
 
 public class HowToPlayTab2Activity extends ActionBarActivity
 {
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

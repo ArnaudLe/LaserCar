@@ -26,6 +26,24 @@
             android:textStyle="bold"
             android:paddingBottom="5dp" />
 
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/img_howtoplay1"
+            android:layout_alignParentTop="false"
+            android:src="@drawable/img_howtoplay1"
+            android:adjustViewBounds="true"
+            android:paddingBottom="15dp" />
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/img_howtoplay2"
+            android:layout_alignParentTop="false"
+            android:src="@drawable/img_howtoplay2"
+            android:adjustViewBounds="true"
+            android:paddingBottom="15dp" />
+
 
     </LinearLayout>
 

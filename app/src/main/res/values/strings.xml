@@ -18,7 +18,7 @@
     <!-- ======================================== -->
     <!-- ============= HOMEACTIVITY ============= -->
     <!-- ======================================== -->
-    <string name="home_footer">Laser Car Project - Parrot Awards &amp; ESIEE Paris - Version 0.9</string>
+    <string name="home_footer">Laser Car Project - Parrot Awards &amp; ESIEE Paris - Version 0.92</string>
 
     <!-- ======================================== -->
     <!-- ========= GAMESETTINGSACTIVITY ========= -->
@@ -26,10 +26,11 @@
     <string name="gamesettings_hint_pseudo">Entrez un pseudo</string>
     <string name="gamesettings_player">Nombre de joueurs</string>
     <string name="gamesettings_time">Durée de la partie</string>
-    <string name="gamesettings_1minute">1min </string>
-    <string name="gamesettings_5minutes">5min </string>
-    <string name="gamesettings_7minutes">7min </string>
-    <string name="gamesettings_10minutes">10min </string>
+    <string name="gamesettings_1min">1min </string>
+    <string name="gamesettings_3min">3min </string>
+    <string name="gamesettings_5min">5min </string>
+    <string name="gamesettings_7min">7min </string>
+    <string name="gamesettings_10min">10min </string>
     <string name="gamesettings_validate">Valider</string>
 
     <!-- ======================================== -->
@@ -46,7 +47,6 @@
     <string name="play_quit">Quitter la partie</string>
     <string name="play_dismiss">Annuler</string>
 
-
     <!-- ======================================== -->
     <!-- ========== HOWTOPLAYACTIVITY1 ========== -->
     <!-- ======================================== -->
@@ -60,7 +60,8 @@
     <!-- ======================================== -->
     <!-- ========== HOWTOPLAYACTIVITY2 ========== -->
     <!-- ======================================== -->
-    <string name="howtoplay2_title">RÈGLES PRINCIPALES</string>
+    <string name="howtoplay2_title">RÈGLES ANNEXES</string>
+    <string name="howtoplay2_regles_texte1">Règle 1 : Au bout de 2 secondes en continu de tir au laser, celui-ci surchauffe et se désactive. Il faut alors attendre que le pourcentage d’utilisation redescende.</string>
 
     <!-- ======================================== -->
     <!-- ========== HOWTOPLAYACTIVITY3 ========== -->

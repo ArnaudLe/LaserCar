@@ -1,4 +1,5 @@
 package com.example.arnaud.lasercar;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -35,7 +36,6 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.Toast;
 
 public class PlayActivity extends Activity implements SensorEventListener
 {
@@ -83,7 +83,7 @@ public class PlayActivity extends Activity implements SensorEventListener
     // Attributs réception de données RPI
     private ServerSocketWrapper serverSocketWrapper;
     // Attributs divers
-    private TextView tvTest;
+    //private TextView tvTest;
     private TextView tvPseudo;
     private TextView tvScore;
     private TextView tvInfo;
@@ -123,7 +123,7 @@ public class PlayActivity extends Activity implements SensorEventListener
         // timer
         tvTimer = (TextView) findViewById(R.id.tv_timer); tvTimer.setTypeface(abolition);
         // autre
-        tvTest = (TextView) findViewById(R.id.tv_test);
+        //tvTest = (TextView) findViewById(R.id.tv_test);
         tvPseudo = (TextView) findViewById(R.id.tv_pseudo); tvPseudo.setTypeface(abolition);
         tvScore = (TextView) findViewById(R.id.tv_score); tvScore.setTypeface(abolition);
         tvInfo = (TextView) findViewById(R.id.tv_info); tvInfo.setTypeface(abolition);
@@ -610,6 +610,9 @@ public class PlayActivity extends Activity implements SensorEventListener
                                 case "startTimer":
                                     startTimer(Integer.parseInt(dataValue));
                                     break;
+                                case "fin":
+                                    printEndGame(dataValue);
+                                    break;
                                 default:
                                     break;
                             }
@@ -669,6 +672,21 @@ public class PlayActivity extends Activity implements SensorEventListener
                 sendTimer();
             }
         }.start();
+    }
+    public void printEndGame(String s)
+    {
+        String message = "";
+        if(s.equals("egal")) message = "Il y a égalité";
+        else if(s.equals("win")) message = "Vous avez gagné !";
+        else message = "Vous avez perdu...";
+
+        new AlertDialog.Builder(this)
+                .setTitle("Fin de la partie")
+                .setMessage(message)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface arg0, int arg1){}
+                }).create().show();
     }
 
 
