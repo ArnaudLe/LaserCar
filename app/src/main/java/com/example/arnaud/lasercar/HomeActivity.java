@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-
 public class HomeActivity extends Activity
 {
     // Redéfinition de la fonction principale
@@ -16,7 +15,7 @@ public class HomeActivity extends Activity
         setContentView(R.layout.activity_homescreen);
     }
 
-    /* Appelee quand l'utilisateur appuie sur le bouton Jouer ! */
+    // Appelee quand l'utilisateur appuie sur le bouton Jouer !
     public void playMessage(View view)
     {
         Intent intent = new Intent(this, GameSettingsActivity.class);
@@ -24,7 +23,7 @@ public class HomeActivity extends Activity
         overridePendingTransition(R.anim.right_to_in, R.anim.in_to_left);
     }
 
-    /* Appelee quand l'utilisateur appuie sur le bouton Options */
+    // Appelee quand l'utilisateur appuie sur le bouton Options
     public void settingsMessage(View view)
     {
         Intent intent = new Intent(this, SettingsActivity.class);

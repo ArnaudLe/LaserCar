@@ -16,7 +16,6 @@ import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-
 public class GameSettingsActivity extends ActionBarActivity
 {
     private NumberPicker np;
@@ -41,8 +40,7 @@ public class GameSettingsActivity extends ActionBarActivity
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.
-                INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         return true;
     }

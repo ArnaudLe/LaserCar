@@ -48,7 +48,6 @@ public class SettingsActivity extends ActionBarActivity
         //enfin on ajoute cette hashMap dans la arrayList
         listItem.add(map);
 
-
         /* ================================================================================ */
         /* =================================== A PROPOS =================================== */
         /* ================================================================================ */
@@ -67,7 +66,6 @@ public class SettingsActivity extends ActionBarActivity
         map.put("description", "Connectez-vous au Wi-Fi Cyclope");
         map.put("img", String.valueOf(R.drawable.ic_settings_wifi));
         listItem.add(map);
-
 
         //Création d'un SimpleAdapter qui se chargera de mettre les items présent dans notre list (listItem) dans la vue affichageitem
         SimpleAdapter mSchedule = new SimpleAdapter (this.getBaseContext(), listItem, R.layout.affichage_settings,

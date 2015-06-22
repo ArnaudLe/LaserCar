@@ -1,4 +1,5 @@
 package com.example.arnaud.lasercar;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -35,7 +36,6 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.Toast;
 
 public class PlayActivity extends Activity implements SensorEventListener
 {
@@ -77,15 +77,13 @@ public class PlayActivity extends Activity implements SensorEventListener
     private TextView tvTimer;
     // Attribus connexion RPI et envoi de données
     public Socket clientSocketHost = null;
-    public Socket clientSocket2 = null;
     public static final int SERVERPORT = 40450;
-    public static String SERVER_IP = "10.5.5.1";
-    public String SERVER_IP2 = "";
+    public static String SERVER_IP_HOST = "10.5.5.1";
     public static boolean flagPlayActivity;
     // Attributs réception de données RPI
     private ServerSocketWrapper serverSocketWrapper;
     // Attributs divers
-    private TextView tvTest;
+    //private TextView tvTest;
     private TextView tvPseudo;
     private TextView tvScore;
     private TextView tvInfo;
@@ -125,7 +123,7 @@ public class PlayActivity extends Activity implements SensorEventListener
         // timer
         tvTimer = (TextView) findViewById(R.id.tv_timer); tvTimer.setTypeface(abolition);
         // autre
-        tvTest = (TextView) findViewById(R.id.tv_test);
+        //tvTest = (TextView) findViewById(R.id.tv_test);
         tvPseudo = (TextView) findViewById(R.id.tv_pseudo); tvPseudo.setTypeface(abolition);
         tvScore = (TextView) findViewById(R.id.tv_score); tvScore.setTypeface(abolition);
         tvInfo = (TextView) findViewById(R.id.tv_info); tvInfo.setTypeface(abolition);
@@ -193,25 +191,22 @@ public class PlayActivity extends Activity implements SensorEventListener
         } // Fin thread vitesse
 
         // Bouton Avancer
-        ibAvancer.setOnLongClickListener
-                (
-                        new View.OnLongClickListener()
-                        {
-                            public boolean onLongClick(View arg0)
-                            {
-                                mAutoIncrement = true;
-                                handlerVitesse.post(new RptUpdaterVitesse());
-                                return false;
-                            }
-                        }
-                );
         ibAvancer.setOnTouchListener
                 (
                         new View.OnTouchListener()
                         {
+                            @Override
                             public boolean onTouch(View v, MotionEvent event)
                             {
-                                if ((event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) && mAutoIncrement)
+                                // Appuie sur le bouton avancer
+                                if(event.getAction() == MotionEvent.ACTION_DOWN)
+                                {
+                                    mAutoIncrement = true;
+                                    handlerVitesse.post(new RptUpdaterVitesse());
+                                    return false;
+                                }
+                                // Relâche le bouton avancer
+                                else if((event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) && mAutoIncrement)
                                 {
                                     mAutoIncrement = false;
                                 }
@@ -221,25 +216,22 @@ public class PlayActivity extends Activity implements SensorEventListener
                 );
 
         // Bouton Reculer
-        ibReculer.setOnLongClickListener
-                (
-                        new View.OnLongClickListener()
-                        {
-                            public boolean onLongClick(View arg0)
-                            {
-                                mAutoDecrement = true;
-                                handlerVitesse.post(new RptUpdaterVitesse());
-                                return false;
-                            }
-                        }
-                );
         ibReculer.setOnTouchListener
                 (
                         new View.OnTouchListener()
                         {
+                            @Override
                             public boolean onTouch(View v, MotionEvent event)
                             {
-                                if ((event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) && mAutoDecrement)
+                                // Appuie sur le bouton reculer
+                                if(event.getAction() == MotionEvent.ACTION_DOWN)
+                                {
+                                    mAutoDecrement = true;
+                                    handlerVitesse.post(new RptUpdaterVitesse());
+                                    return false;
+                                }
+                                // Relâche le bouton reculer
+                                else if ((event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) && mAutoDecrement)
                                 {
                                     mAutoDecrement = false;
                                 }
@@ -280,25 +272,22 @@ public class PlayActivity extends Activity implements SensorEventListener
             }
         } // Fin thread laser
 
-        ibLaser.setOnLongClickListener
-                (
-                        new View.OnLongClickListener()
-                        {
-                            public boolean onLongClick(View arg0)
-                            {
-                                lAutoIncrement = true;
-                                handlerLaser.post(new RptUpdaterLaser());
-                                return false;
-                            }
-                        }
-                );
         ibLaser.setOnTouchListener
                 (
                         new View.OnTouchListener()
                         {
+                            @Override
                             public boolean onTouch(View v, MotionEvent event)
                             {
-                                if ((event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) && lAutoIncrement)
+                                // Appuie sur le bouton laser
+                                if(event.getAction() == MotionEvent.ACTION_DOWN)
+                                {
+                                    lAutoIncrement = true;
+                                    handlerLaser.post(new RptUpdaterLaser());
+                                    return false;
+                                }
+                                // Relâche le bouton laser
+                                else if((event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) && lAutoIncrement)
                                 {
                                     lAutoIncrement = false;
                                 }
@@ -381,6 +370,7 @@ public class PlayActivity extends Activity implements SensorEventListener
         {
             timeLaser++;
             tvLaser.setText("Laser : " + (int) Math.floor(timeLaser*1.25) + "%"); // Mul par 1.25 pour passage échelle 0-80 à 0-100
+            if(timeLaser == 100/1.25) tvLaser.setText("Laser : 100% - SURCHAUFFE");
         }
     }
     // Fonctions gestion décrémentation
@@ -460,7 +450,10 @@ public class PlayActivity extends Activity implements SensorEventListener
     }
 
     // Met sous la bonne forme pour envoi de données pour l'identification
-    public String setFormProfile(){return getAdresseIP() + "&setprofile&name*" + data_pseudo + "*type*android*role*master*feedback*True";}
+    public String setFormProfile(){return getAdresseIP() + "&setprofile&name*" + data_pseudo + "*type*android*role*true_master*feedback*True";}
+
+    // Met sous la bonne forme pour envoi de données pour la configuration d'une partie
+    public String setFormGame(){return getAdresseIP() + "&setgame&" + data_player + "*" + data_time;}
 
     /* ================================================================================ */
     /* ================ CONNEXION RASPBERRY ET ENVOI DE DONNEES VITESSE =============== */
@@ -477,42 +470,22 @@ public class PlayActivity extends Activity implements SensorEventListener
             try
             {
                 // Connexion Android vers RPI
-                InetAddress serverAddr = InetAddress.getByName(SERVER_IP);
+                InetAddress serverAddr = InetAddress.getByName(SERVER_IP_HOST);
                 clientSocketHost = new Socket(serverAddr, SERVERPORT);
-                Log.d("MyTag", "Création du client vers RPI Host");
+                Log.d("MyTag", "Création du client");
 
                 // Envoie de données Configuration Profile + Partie
                 setProfile(clientSocketHost);
                 Thread.sleep(2000);
-
-            } catch (IOException | InterruptedException e1) {
-                e1.printStackTrace();
-            }
-        }
-    } // Fin ClientThread
-
-    // Fonction connexion smartphone à RPI et envoi de données (mal optimisé)
-    public void connectrpi2() {new Thread(new ClientThread2()).start();}
-
-    // Thread qui gère la connexion et l'envoi de données CONNEXION 1
-    class ClientThread2 implements Runnable
-    {
-        @Override
-        public void run()
-        {
-            try
-            {
-                // Connexion Android vers RPI
-                InetAddress serverAddr = InetAddress.getByName(SERVER_IP2);
-                clientSocket2 = new Socket(serverAddr, SERVERPORT);
-                Log.d("MyTag", "Création du client vers ma RPI");
+                setGame();
+                Thread.sleep(2000);
 
                 // Envoi de données vitesse
                 while(flagPlayActivity)
                 {
                     OutputStream outputStream;
                     String msg = setFormMotorAngle();
-                    outputStream = clientSocket2.getOutputStream();
+                    outputStream = clientSocketHost.getOutputStream();
                     PrintStream printStream = new PrintStream(outputStream);
                     printStream.print(msg);
                     //printStream.close();
@@ -533,7 +506,7 @@ public class PlayActivity extends Activity implements SensorEventListener
         try {
             String data = setFormLaser();
             PrintWriter out = new PrintWriter(new BufferedWriter(
-                    new OutputStreamWriter(clientSocket2.getOutputStream())),
+                    new OutputStreamWriter(clientSocketHost.getOutputStream())),
                     true);
             out.println(data);
         } catch (Exception e) {
@@ -542,7 +515,7 @@ public class PlayActivity extends Activity implements SensorEventListener
     }
 
     /* ================================================================================ */
-    /* ====================== ENVOI DE DONNEES SETPROFILE ============================= */
+    /* =================== ENVOI DE DONNEES SETPROFILE + SETGAME ====================== */
     /* ================================================================================ */
     public void setProfile(Socket s)
     {
@@ -550,6 +523,34 @@ public class PlayActivity extends Activity implements SensorEventListener
             String data = setFormProfile();
             PrintWriter out = new PrintWriter(new BufferedWriter(
                     new OutputStreamWriter(s.getOutputStream())),
+                    true);
+            out.println(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void setGame()
+    {
+        try {
+            String data = setFormGame();
+            PrintWriter out = new PrintWriter(new BufferedWriter(
+                    new OutputStreamWriter(clientSocketHost.getOutputStream())),
+                    true);
+            out.println(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /* ================================================================================ */
+    /* ========================== ENVOI DE DONNEES TIMER ============================== */
+    /* ================================================================================ */
+    public void sendTimer()
+    {
+        try {
+            String data = getAdresseIP() + "&stop&" + "eric";
+            PrintWriter out = new PrintWriter(new BufferedWriter(
+                    new OutputStreamWriter(clientSocketHost.getOutputStream())),
                     true);
             out.println(data);
         } catch (Exception e) {
@@ -606,11 +607,11 @@ public class PlayActivity extends Activity implements SensorEventListener
                                 case "score":
                                     receiveScore(dataValue);
                                     break;
-                                case "associated_device_ip":
-                                    setIP2(dataValue);
+                                case "startTimer":
+                                    startTimer(Integer.parseInt(dataValue));
                                     break;
-                                case "start":
-                                    startTimer();
+                                case "fin":
+                                    printEndGame(dataValue);
                                     break;
                                 default:
                                     break;
@@ -622,9 +623,9 @@ public class PlayActivity extends Activity implements SensorEventListener
                 // On réinitialise le contenu de la donnée
                 serverSocketWrapper.setData(""); //
 
-                // Ectoute toutes les 100ms
+                // Ectoute toutes les 3ms
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(3);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -640,14 +641,14 @@ public class PlayActivity extends Activity implements SensorEventListener
         tvInfo.setText("Vous avez touché " + s + " !\n +2");
         score = score + 2;
         tvScore.setText(("Score : " + score));
-        ((Vibrator)getSystemService(VIBRATOR_SERVICE)).vibrate(200);
+        ((Vibrator)getSystemService(VIBRATOR_SERVICE)).vibrate(100);
     }
     public void beTouched(String s)
     {
-        tvInfo.setText("Vous avez été touché par " + s + " !\n +1");
+        tvInfo.setText("Vous avez été touché par " + s + " !\n -1");
         score--;
         tvScore.setText(("Score : " + score));
-        ((Vibrator)getSystemService(VIBRATOR_SERVICE)).vibrate(800);
+        ((Vibrator)getSystemService(VIBRATOR_SERVICE)).vibrate(400);
     }
     public void receiveScore(String s)
     {
@@ -658,27 +659,36 @@ public class PlayActivity extends Activity implements SensorEventListener
             for(int i = 0 ; i < Integer.parseInt(data_player) ; i++){scorePlayer[i] = splitData[i];}
         }
     }
-    public void setIP2(String s)
+    public void startTimer(int time)
     {
-        SERVER_IP2 = s;
-        connectrpi2();
-    }
-    public void startTimer()
-    {
-        // Récupération du temps de la partie choisi
-        String time = data_time.substring(0, 1); // 5 ou 7 min
-        if(data_time.equals("10min")) time=data_time.substring(0,2); // 10min
-
-        new CountDownTimer(Integer.parseInt(time)*60*1000, 1000) // Integer.parseInt(time)*60*1000
+        // Création du timer
+        new CountDownTimer(time*60*1000, 1000)
         {
             public void onTick(long millisUntilFinished) {tvTimer.setText("Timer : " + millisUntilFinished / 1000);}
 
             public void onFinish()
             {
                 tvTimer.setText("TEMPS ÉCOULÉ !");
+                sendTimer();
             }
         }.start();
     }
+    public void printEndGame(String s)
+    {
+        String message = "";
+        if(s.equals("egal")) message = "Il y a égalité";
+        else if(s.equals("win")) message = "Vous avez gagné !";
+        else message = "Vous avez perdu...";
+
+        new AlertDialog.Builder(this)
+                .setTitle("Fin de la partie")
+                .setMessage(message)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface arg0, int arg1){}
+                }).create().show();
+    }
+
 
     /* ================================================================================ */
     /* ====================== GESTION DU TABLEAU DES SCORES =========================== */
@@ -778,6 +788,9 @@ public class PlayActivity extends Activity implements SensorEventListener
                     public void onClick(DialogInterface arg0, int arg1)
                     {
                         PlayActivity.super.onBackPressed();
+
+                        // Arrêt de tous les thread en cours
+                        Thread.currentThread().interrupt();
                     }
                 }).create().show();
     }

@@ -10,18 +10,17 @@ import android.view.View;
 import android.widget.TabHost;
 import android.widget.TextView;
 
-
 public class HowToPlayActivity extends TabActivity
 {
     private TabHost tabHost;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_how_to_play);
 
         this.tabHost = getTabHost();
-
 
         /* ================================================================================ */
         /* ========================= INSTANCIATION DES ONGLETS ============================ */
@@ -31,7 +30,8 @@ public class HowToPlayActivity extends TabActivity
         setupTab("Commande", "tab3", new Intent().setClass(this, HowToPlayTab3Activity.class));
     }
 
-    private void setupTab(String name, String tag, Intent intent) {
+    private void setupTab(String name, String tag, Intent intent)
+    {
         tabHost.addTab(tabHost.newTabSpec(tag).setIndicator(createTabView(tabHost.getContext(), name)).setContent(intent));
     }
 

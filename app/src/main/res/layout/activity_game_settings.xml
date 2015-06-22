@@ -52,27 +52,27 @@
         android:layout_height="fill_parent"
         android:orientation="horizontal"
         android:id="@+id/rg_time"
-        android:checkedButton="@+id/rb_5minutes"
+        android:checkedButton="@+id/rb_1min"
         android:layout_weight="0.95">
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/gamesettings_1minute"
-            android:id="@+id/rb_5minutes"
+            android:text="@string/gamesettings_1min"
+            android:id="@+id/rb_1min"
             android:buttonTint="@color/red"
             android:layout_gravity="center_vertical" />
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/gamesettings_7minutes"
-            android:id="@+id/rb_7minutes"
+            android:text="@string/gamesettings_3min"
+            android:id="@+id/rb_3min"
             android:buttonTint="@color/red"
             android:layout_gravity="center_vertical" />
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/gamesettings_10minutes"
-            android:id="@+id/rb_10minutes"
+            android:text="@string/gamesettings_5min"
+            android:id="@+id/rb_5min"
             android:buttonTint="@color/red"
             android:layout_gravity="center_vertical" />
     </RadioGroup>
