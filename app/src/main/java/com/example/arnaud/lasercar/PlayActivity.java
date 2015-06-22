@@ -180,7 +180,7 @@ public class PlayActivity extends Activity implements SensorEventListener
                 // Relache avancer OU Appuie reculer
                 else if((mVitesse > 0 && !mAutoIncrement) || (mVitesse <= 0 && mAutoDecrement))
                 {
-                    if(mVitesse > -100)
+                    if(mVitesse > -70)
                     {
                         decrement("vitesse");
                         handlerVitesse.postDelayed(new RptUpdaterVitesse(), DELAY);
