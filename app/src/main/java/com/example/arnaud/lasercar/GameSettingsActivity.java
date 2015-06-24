@@ -29,11 +29,11 @@ public class GameSettingsActivity extends ActionBarActivity
 
         PlayActivity.flagPlayActivity = false; // Flag indiquant que l'on n'est pas dans PlayActivity
 
-        NumberPicker np = (NumberPicker) findViewById(R.id.np_player);
+        /*NumberPicker np = (NumberPicker) findViewById(R.id.np_player);
         np.setMaxValue(8);
         np.setMinValue(1);
 
-        np.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS); // désactive clavier pour le NumberPicker
+        np.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS); // désactive clavier pour le NumberPicker*/
     }
 
     // Masque le clavier après un clic ailleurs que l'EditText
@@ -54,8 +54,9 @@ public class GameSettingsActivity extends ActionBarActivity
         // Récupère le pseudo de l'EditText et l'ajoute au Intent a envoyer
         EditText et_pseudo = (EditText) findViewById(R.id.et_pseudo);
         String data_pseudo = et_pseudo.getText().toString();
+
         intent.putExtra("message_pseudo", data_pseudo); // putExtra(String name, String value)
-        // Récupère le nombre de joueurs du NumberPicker et l'ajoute au Intent a envoyer
+        /*// Récupère le nombre de joueurs du NumberPicker et l'ajoute au Intent a envoyer
         NumberPicker np = (NumberPicker) findViewById(R.id.np_player);
         String data_player = "" + np.getValue();
         intent.putExtra("message_player", data_player);
@@ -63,7 +64,7 @@ public class GameSettingsActivity extends ActionBarActivity
         RadioGroup rg_time = (RadioGroup)findViewById(R.id.rg_time);
         int buttonCheckedId = rg_time.getCheckedRadioButtonId();
         String data_time = ((RadioButton) findViewById(buttonCheckedId)).getText().toString();
-        intent.putExtra("message_time", data_time);
+        intent.putExtra("message_time", data_time);*/
 
         startActivity(intent);
     }
